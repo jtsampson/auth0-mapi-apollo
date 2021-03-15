@@ -36,13 +36,13 @@ I would like to get to a full implementation. If you would like to help out, ple
 # Mapping APIS to Query/Mutation
 
 | Resource           | Operation                                              | Query/Mutation                    | 
-| :----------------- | :----------------------------------------------------- | :-------------------------------  | 
+| :------------------| :----------------------------------------------------- | :-------------------------------- | 
 | Branding           | Get branding settings                                  | brandings                         | 
 | Branding           | Update branding settings                               | updateBrandings                   | 
 | Branding           | Get New Universal Login Experience template            | brandingTemplates                 |
 | Branding           | Create/Update New Universal Login Experience template  | updateBrandingTemplates           |
 | Branding           | Delete New Universal Login Experience template         | deleteBrandingTemplates           |
-| Client Grants      | Get Client Grants                                      | clientGrants/clientGrantsByFilter |            |
+| Client Grants      | Get Client Grants                                      | clientGrants, clientGrantsByFilter|         
 | Client Grants      | Create Client Grant                                    | createClientGrant                 | 
 | Client Grants      | Delete Client Grant                                    | deleteClientGrant                 | 
 | Client Grants      | Update Client Grant                                    | updateClientGrant                 | 
@@ -51,53 +51,53 @@ I would like to get to a full implementation. If you would like to help out, ple
 | Client             | Delete Client                                          | deleteClient                      |
 | Client             | Update Client                                          | updateClient                      |
 | Client             | Rotate Client Secret                                   | rotateClient                      |
-| Connections        | Get All Connections                                    | connections/connectionsByName/connectionsByFilter/connectionsByStrategy                      |
+| Connections        | Get All Connections                                    | connections, connectionsByName, connectionsByFilter, connectionsByStrategy |
 | Connections        | Create Connection                                      | createConnection                  |
 | Connections        | Get a Connection                                       | connection                        | 
 | Connections        | Delete a Connection                                    | deleteConnection                  | 
-| Connections        | Update a Connection                                    | **TODO**                          | 
+| Connections        | Update a Connection                                    | `TODO`                          | 
 | Connections        | Check Connection Status                                | connectionStatus                  |
 | Connections        | Delete Connection User                                 | deleteConnectionUser              |
-| Custom Domains     | Get Custom Domain Configurations                       | **TODO**                          |
-| Custom Domains     | Configure New Custom Domain                            | **TODO**                          |
-| Custom Domains     | Get Custom Domain Configuration                        | **TODO**                          |
-| Custom Domains     | Delete Custom Domain Configuration                     | **TODO**                          |
-| Custom Domains     | Update Custom Domain Configuration                     | **TODO**                          |
-| Custom Domains     | Verify Custom Domain Configuration                     | **TODO**                          |
+| Custom Domains     | Get Custom Domain Configurations                       | `TODO`                          |
+| Custom Domains     | Configure New Custom Domain                            | `TODO`                          |
+| Custom Domains     | Get Custom Domain Configuration                        | `TODO`                          |
+| Custom Domains     | Delete Custom Domain Configuration                     | `TODO`                          |
+| Custom Domains     | Update Custom Domain Configuration                     | `TODO`                          |
+| Custom Domains     | Verify Custom Domain Configuration                     | `TODO`                          |
 | Device Credentials | Get Device Credentials                                 | deviceCredentialsByFilter         |
-| Device Credentials | Create a device public key credential                  | createDeviceCredentials **TODO** (requires access token with create:current_user_device_credentials, not allowed by client_credential grant)                       |
+| Device Credentials | Create a device public key credential                  | createDeviceCredentials `TODO` (requires access token with create:current_user_device_credentials, not allowed by client_credential grant) |
 | Device Credentials | Delete Device Credentials                              | deleteDeviceCredentials           |
-| Grants             | Get Grants                                             | grants/grantsByFilter             |
+| Grants             | Get Grants                                             | grants, grantsByFilter             |
 | Grants             | Delete a Grant                                         | deleteGrant                       |
-| Hooks              | Get Hooks                                              | hooks/hooksByFilter               |
+| Hooks              | Get Hooks                                              | hooks, hooksByFilter               |
 | Hooks              | Create a Hook                                          | createHook                        |
-| Hooks              | Get a Hook                                             | **TODO**                          |
-| Hooks              | Delete a Hook                                          | **TODO**                          |
-| Hooks              | Update a Hook                                          | **TODO**                          |
-| Hooks              | Get Hook Secrets                                       | **TODO**                          |
-| Hooks              | Delete Hook Secrets                                    | **TODO**                          |
-| Hooks              | Update Hook Secrets                                    | **TODO**                          |
-| Hooks              | Add Hook Secrets                                       | **TODO**                          |
-| Log Streams        | All                                                    | **TODO**                          |
-| Logs               | All                                                    | **TODO**                          |
-| Prompts            | All                                                    | **TODO**                          |
-| Resource Servers   | All                                                    | **TODO**                          |
-| Roles              | All                                                    | **TODO**                          |
-| Rules              | All                                                    | **TODO**                          |
-| Rule Configs       | All                                                    | **TODO**                          |
-| User Blocks        | All                                                    | **TODO**                          |
-| Users              | All                                                    | **TODO**                          |
-| Users By Email     | All                                                    | **TODO**                          |
-| Blacklists         | All                                                    | **TODO**                          |
-| Email Templates    | All                                                    | **TODO**                          |
-| Emails             | All                                                    | **TODO**                          |
-| Guardian           | All                                                    | **TODO**                          |
-| Jobs               | All                                                    | **TODO**                          |
-| Keys               | All                                                    | **TODO**                          |
-| Stats              | All                                                    | **TODO**                          |
-| Tenants            | All                                                    | **TODO**                          |
-| Anomaly            | All                                                    | **TODO**                          |
-| Tickets            | All                                                    | **TODO**                          |
+| Hooks              | Get a Hook                                             | `TODO`                          |
+| Hooks              | Delete a Hook                                          | `TODO`                          |
+| Hooks              | Update a Hook                                          | `TODO`                          |
+| Hooks              | Get Hook Secrets                                       | `TODO`                          |
+| Hooks              | Delete Hook Secrets                                    | `TODO`                          |
+| Hooks              | Update Hook Secrets                                    | `TODO`                          |
+| Hooks              | Add Hook Secrets                                       | `TODO`                          |
+| Log Streams        | All                                                    | `TODO`                          |
+| Logs               | All                                                    | `TODO`                          |
+| Prompts            | All                                                    | `TODO`                          |
+| Resource Servers   | All                                                    | `TODO`                          |
+| Roles              | All                                                    | `TODO`                          |
+| Rules              | All                                                    | `TODO`                          |
+| Rule Configs       | All                                                    | `TODO`                          |
+| User Blocks        | All                                                    | `TODO`                          |
+| Users              | All                                                    | `TODO`                          |
+| Users By Email     | All                                                    | `TODO`                          |
+| Blacklists         | All                                                    | `TODO`                          |
+| Email Templates    | All                                                    | `TODO`                          |
+| Emails             | All                                                    | `TODO`                          |
+| Guardian           | All                                                    | `TODO`                          |
+| Jobs               | All                                                    | `TODO`                          |
+| Keys               | All                                                    | `TODO`                          |
+| Stats              | All                                                    | `TODO`                          |
+| Tenants            | All                                                    | `TODO`                          |
+| Anomaly            | All                                                    | `TODO`                          |
+| Tickets            | All                                                    | `TODO`                          |
 
 # Design Considerations
 - Avoid use of JSON type when possible: if necessary, use and deprecate.
