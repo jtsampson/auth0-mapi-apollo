@@ -1,3 +1,4 @@
+[![License: ISC](https://img.shields.io/badge/License-ISC-blue.svg)](https://opensource.org/licenses/ISC)
 
 # auth0-mapi-apollo
 
@@ -15,6 +16,7 @@ Starting with a strict api version and may migrate to a more ui based schema
 - [Mapping APIS to Query/Mutation](#mapping-apis-to-querymutation)
 - [Design Considerations](#design-considerations)
 - [License](#license)
+- [Contribute](#contribute)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -110,4 +112,7 @@ Starting with a strict api version and may migrate to a more ui based schema
     - Types:  Resource Name
 
 # License
- None, standard copyright laws apply
+ - [LICENSE](./LICENSE)
+
+# Contribute
+ - [CONTRIBUTE](./CONTRIBUTING.md)
