@@ -1,4 +1,4 @@
-[![License: ISC](https://img.shields.io/badge/License-ISC-blue.svg)](https://opensource.org/licenses/ISC)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 # auth0-mapi-apollo
 
@@ -6,6 +6,8 @@ An in-progress, unofficial apollo graphql wrapper for the Auth0 Management API.
 
 Built for fun and primarily as an exercise in building a rest backed apollo api.
 Starting with a strict api version and may migrate to a more ui based schema
+
+I would like to get to a full implementation. If you would like to help out, please see CONTRIBUTING.md.
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
