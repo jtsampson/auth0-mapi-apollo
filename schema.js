@@ -138,6 +138,14 @@ const typeDefs = gql`
         REFRESH_TOKEN
     }
 
+    enum HookTriggerIdType {
+        CREDENTIALS_EXCHANGE,
+        PRE_USER_REGISTRATION,
+        POST_USER_REGISTRATION,
+        POST_CHANGE_PASSWORD,
+        SEND_PHONE_MESSAGE
+    }
+
     enum OIDCChannelType {
         BACK_CHANNEL
         FRONT_CHANNEL
@@ -161,7 +169,7 @@ const typeDefs = gql`
         POST
         BASIC
     }
-
+    
     enum ConnectionOptionsSamlSignatureAlgorithm {
         RSA_SHA1
         RSA_SHA256
@@ -249,7 +257,7 @@ const typeDefs = gql`
     }
 
     input InputHooksByFilter {
-        triggerID : String
+        triggerID : HookTriggerIdType
         enabled :Boolean
         page : Int
         per_page : Int
@@ -276,9 +284,10 @@ const typeDefs = gql`
     }
 
     input InputHookCreate {
-        name: String
+        name: String!
         enabled: Boolean
-        script: String
+        triggerId: HookTriggerIdType!
+        script: String!
         dependencies: JSON
     }
 
@@ -1093,13 +1102,25 @@ const typeDefs = gql`
         user_id : String
     }
     
-    input InputDeviceCredentialPublicKeyCreate
+    input InputDeviceCredentialPublicKeyCreate {
+        # TODO
+      id: ID!
+    }
+    
+    input InputHook {
+        id: String!,
+        triggerId: HookTriggerIdType!
+        name: String!
+        enabled: Boolean,
+        script: String
+        dependencies: JSON
+    }
 
     
     type Hook {
-        id: String,
-        triggerId: String
-        name: String
+        id: String!,
+        triggerId: HookTriggerIdType!
+        name: String!
         enabled: Boolean,
         script: String
         dependencies: JSON
@@ -1280,6 +1301,12 @@ const typeDefs = gql`
         deleteGrant(input: InputGrantDelete!) : OutputGrantDelete
 
         createHook(input: InputHookCreate!) : Hook
+        # TODO think about a delete pattern where we first get the resource to delete, if not exist, then
+        # return 204, if exists call delete and pass back object from first call, in this case a 'Hook'
+        # instead of a OutPutGHookDelete.
+        deleteHook(input: InputHook) : Hook
+        updateHook(input: InputHook) : Hook
+
     }
 
     # ------------------
@@ -1311,6 +1338,8 @@ const typeDefs = gql`
 
         hooks: [Hook]!
         hooksByFilter(filter : InputHooksByFilter): [Hook]!
+        hook(input: InputHook) : Hook
+        
     }
 
     type OutputGrantDelete {

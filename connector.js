@@ -100,6 +100,11 @@ class Connector {
       response => successHandler(response),
       error => errorHandler(error)
     )
+
+    this.patchFilters = {
+      // See https://github.com/auth0/auth0-deploy-cli/blob/cc5c4a09df565ff567c3ce7d79098107b9aa99a0/src/readonly.js
+      hook: ['id', 'triggerId']
+    }
   }
 
   // -----------------------
@@ -460,10 +465,10 @@ class Connector {
 
   /**
    * Create a new hook.
-   * @param {object} hook            - the hook
-   * @param {string} hook.enabled    - hook (true) enabled, (false) disabled
-   * @param {boolean} hook.name      - hook name
-   * @param {string} hook.triggerId  - hook trigger id
+   * @param {object} hook              - the hook
+   * @param {string} hook.enabled      - hook (true) enabled, (false) disabled
+   * @param {string} hook.name         - hook name
+   * @param {string} hook.triggerId    - hook trigger id
    * @param {json}   hook.dependencies - the hook metadata as stringified json
    * @returns {Promise<*>}
    * @see https://auth0.com/docs/api/management/v2#!/Hooks/post_hooks
@@ -472,17 +477,43 @@ class Connector {
     return this.api.post('/api/v2/hooks', hook).then(res => res.data)
   }
 
-  getHook (id) {
-    return this.api.get(`/api/v2/hooks/${id}`).then(res => res.data)
+  /**
+   * Retrieve a hook by its ID.
+   * @param {object} hook              - the hook
+   * @param {string} hook.id           - the hook id
+   * @returns {Promise<AxiosResponse<any>>}
+   * @see https://auth0.com/docs/api/management/v2#!/Hooks/get_hooks_by_id
+   */
+  getHook (hook) {
+    return this.api.get(`/api/v2/hooks/${hook.id}`).then(res => res.data)
   }
 
-  deleteHook (id) {
-    // TODO : delete response.
-    return this.api.delete(`/api/v2/hooks/${id}`).then(() => { return { id: id } })
+  /**
+   * Delete a hook.
+   * @param {object} hook  - the hook
+   * @param {string} hook.id  - the hook id to delete
+   * @returns {Promise<{id: *}>}
+   * @see https://auth0.com/docs/api/management/v2#!/Hooks/delete_hooks_by_id
+   */
+  deleteHook (hook) {
+    // In general the delete API returns a 204 whether or not the hook id exists, so this always outputs the input
+    return this.api.delete(`/api/v2/hooks/${hook.id}`).then(() => { return hook })
   }
 
-  updateHook (id, hook) {
-    return this.api.patch(`/api/v2/hooks/${id}`, hook).then(res => res.data)
+  /**
+   * Update a hook.
+   * @param {object} hook              - the hook
+   * @param {string} hook.id           - the hook id
+   * @param {string} hook.enabled      - hook (true) enabled, (false) disabled
+   * @param {string} hook.name        - hook name
+   * @param {string} hook.triggerId    - hook trigger id
+   * @param {json}   hook.dependencies - the hook metadata as stringified json
+   * @returns {Promise<AxiosResponse<any>>}
+   * @see https://auth0.com/docs/api/management/v2#!/Hooks/delete_hooks_by_id
+   */
+  updateHook (hook) {
+    const patch = this.omit(hook, this.patchFilters.hook)
+    return this.api.patch(`/api/v2/hooks/${hook.id}`, patch).then(res => res.data)
   }
 
   // TODO: fix this, it's not pretty.
@@ -492,6 +523,12 @@ class Connector {
       filter.app_type = filter.app_type.join(',')
     }
     return filter
+  }
+
+  omit (obj, props) {
+    props = props instanceof Array ? props : [props]
+    // eslint-disable-next-line no-eval
+    return eval(`(({${props.join(',')}, ...o}) => o)(obj)`)
   }
 }
 

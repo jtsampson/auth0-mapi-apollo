@@ -55,30 +55,30 @@ I would like to get to a full implementation. If you would like to help out, ple
 | Connections        | Create Connection                                      | createConnection                  |
 | Connections        | Get a Connection                                       | connection                        | 
 | Connections        | Delete a Connection                                    | deleteConnection                  | 
-| Connections        | Update a Connection                                    | `TODO`                          | 
+| Connections        | Update a Connection                                    | `TODO`                            | 
 | Connections        | Check Connection Status                                | connectionStatus                  |
 | Connections        | Delete Connection User                                 | deleteConnectionUser              |
-| Custom Domains     | Get Custom Domain Configurations                       | `TODO`                          |
-| Custom Domains     | Configure New Custom Domain                            | `TODO`                          |
-| Custom Domains     | Get Custom Domain Configuration                        | `TODO`                          |
-| Custom Domains     | Delete Custom Domain Configuration                     | `TODO`                          |
-| Custom Domains     | Update Custom Domain Configuration                     | `TODO`                          |
-| Custom Domains     | Verify Custom Domain Configuration                     | `TODO`                          |
+| Custom Domains     | Get Custom Domain Configurations                       | `TODO`                            |
+| Custom Domains     | Configure New Custom Domain                            | `TODO`                            |
+| Custom Domains     | Get Custom Domain Configuration                        | `TODO`                            |
+| Custom Domains     | Delete Custom Domain Configuration                     | `TODO`                            |
+| Custom Domains     | Update Custom Domain Configuration                     | `TODO`                            |
+| Custom Domains     | Verify Custom Domain Configuration                     | `TODO`                            |
 | Device Credentials | Get Device Credentials                                 | deviceCredentialsByFilter         |
 | Device Credentials | Create a device public key credential                  | createDeviceCredentials `TODO` (requires access token with create:current_user_device_credentials, not allowed by client_credential grant) |
 | Device Credentials | Delete Device Credentials                              | deleteDeviceCredentials           |
-| Grants             | Get Grants                                             | grants, grantsByFilter             |
+| Grants             | Get Grants                                             | grants, grantsByFilter            |
 | Grants             | Delete a Grant                                         | deleteGrant                       |
-| Hooks              | Get Hooks                                              | hooks, hooksByFilter               |
+| Hooks              | Get Hooks                                              | hooks, hooksByFilter              |
 | Hooks              | Create a Hook                                          | createHook                        |
-| Hooks              | Get a Hook                                             | `TODO`                          |
-| Hooks              | Delete a Hook                                          | `TODO`                          |
-| Hooks              | Update a Hook                                          | `TODO`                          |
-| Hooks              | Get Hook Secrets                                       | `TODO`                          |
-| Hooks              | Delete Hook Secrets                                    | `TODO`                          |
-| Hooks              | Update Hook Secrets                                    | `TODO`                          |
-| Hooks              | Add Hook Secrets                                       | `TODO`                          |
-| Log Streams        | All                                                    | `TODO`                          |
+| Hooks              | Get a Hook                                             | hook                              |
+| Hooks              | Delete a Hook                                          | deleteHook                        |
+| Hooks              | Update a Hook                                          | updateHook                        |
+| Hooks              | Get Hook Secrets                                       | `TODO`                            |
+| Hooks              | Delete Hook Secrets                                    | `TODO`                            |
+| Hooks              | Update Hook Secrets                                    | `TODO`                            |
+| Hooks              | Add Hook Secrets                                       | `TODO`                            |
+| Log Streams        | All                                                    | `TODO`                            |
 | Logs               | All                                                    | `TODO`                          |
 | Prompts            | All                                                    | `TODO`                          |
 | Resource Servers   | All                                                    | `TODO`                          |

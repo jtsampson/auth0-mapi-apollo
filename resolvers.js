@@ -327,11 +327,11 @@ const resolvers = {
     YANDEX: 'yandex'
 
   },
-  DeviceCredentialType : {
+  DeviceCredentialType: {
     PUBLIC_KEY: 'public_key',
     REFRESH_TOKEN: 'refresh_token',
-    ROTATING_REFRESH_TOKEN 'rotating_refresh_token'
-},
+    ROTATING_REFRESH_TOKEN: 'rotating_refresh_token'
+  },
   ExpirationType: {
     NON_EXPIRING: 'non-expiring'
     // TODO are there more types?
@@ -349,6 +349,13 @@ const resolvers = {
     REFRESH_TOKEN: 'refresh_token'
   },
   HCC: GraphQLHexColorCode,
+  HookTriggerIdType: {
+    CREDENTIALS_EXCHANGE: 'credentials-exchange',
+    PRE_USER_REGISTRATION: 'pre-user-registration',
+    POST_USER_REGISTRATION: 'post-user-registration',
+    POST_CHANGE_PASSWORD: 'post-change-password',
+    SEND_PHONE_MESSAGE: 'send-phone-message'
+  },
   JSON: GraphQLJSON,
   JSONObject: GraphQLJSONObject,
   Mutation: {
@@ -365,9 +372,11 @@ const resolvers = {
     createConnection: (_, { connection }, { dataSources }) => dataSources.clients.createConnection(connection),
     deleteConnection: (_, { id }, { dataSources }) => dataSources.clients.deleteConnection(id),
     deleteConnectionUser: (_, { input }, { dataSources }) => dataSources.clients.deleteConnectionUser(input),
-    deleteDeviceCredential:(_, { id }, { dataSources }) => dataSources.clients.deleteDeviceCredential(id),
+    deleteDeviceCredential: (_, { id }, { dataSources }) => dataSources.clients.deleteDeviceCredential(id),
     deleteGrant: (_, { input }, { dataSources }) => dataSources.clients.deleteGrant(input),
-    createHook: (_, { input }, { dataSources }) => dataSources.clients.createHook(input)
+    createHook: (_, { input }, { dataSources }) => dataSources.clients.createHook(input),
+    deleteHook: (_, { input }, { dataSources }) => dataSources.clients.deleteHook(input),
+    updateHook: (_, { input }, { dataSources }) => dataSources.clients.updateHook(input)
   },
   OIDCChannelType: {
     BACK_CHANNEL: 'back_channel',
@@ -393,7 +402,8 @@ const resolvers = {
     deviceCredentialsByFilter: (_, { filter }, { dataSources }) => dataSources.clients.getDeviceCredentialsByFilter(filter),
     grantsByFilter: (_, { filter }, { dataSources }) => dataSources.clients.getGrantsByFilter(filter),
     hooks: (_, __, { dataSources }) => dataSources.clients.getHooksByFilter({}),
-    hooksByFilter: (_, { filter }, { dataSources }) => dataSources.clients.getHooksByFilter(filter)
+    hooksByFilter: (_, { filter }, { dataSources }) => dataSources.clients.getHooksByFilter(filter),
+    hook: (_, { input }, { dataSources }) => dataSources.clients.getHook(input)
   },
   RotationType: {
     NON_ROTATING: 'non-rotating' // TODO are there more types?
