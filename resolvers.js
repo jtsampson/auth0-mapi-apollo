@@ -376,7 +376,11 @@ const resolvers = {
     deleteGrant: (_, { input }, { dataSources }) => dataSources.clients.deleteGrant(input),
     createHook: (_, { input }, { dataSources }) => dataSources.clients.createHook(input),
     deleteHook: (_, { input }, { dataSources }) => dataSources.clients.deleteHook(input),
-    updateHook: (_, { input }, { dataSources }) => dataSources.clients.updateHook(input)
+    updateHook: (_, { input }, { dataSources }) => dataSources.clients.updateHook(input),
+    addHookSecrets: (_, { input }, { dataSources }) => dataSources.clients.addHookSecrets(input),
+    updateHookSecrets: (_, { input }, { dataSources }) => dataSources.clients.updateHookSecrets(input),
+    deleteHookSecrets: (_, { input }, { dataSources }) => dataSources.clients.deleteHookSecrets(input)
+
   },
   OIDCChannelType: {
     BACK_CHANNEL: 'back_channel',
@@ -403,7 +407,8 @@ const resolvers = {
     grantsByFilter: (_, { filter }, { dataSources }) => dataSources.clients.getGrantsByFilter(filter),
     hooks: (_, __, { dataSources }) => dataSources.clients.getHooksByFilter({}),
     hooksByFilter: (_, { filter }, { dataSources }) => dataSources.clients.getHooksByFilter(filter),
-    hook: (_, { input }, { dataSources }) => dataSources.clients.getHook(input)
+    hook: (_, { input }, { dataSources }) => dataSources.clients.getHook(input),
+    hookSecrets: (_, { id }, { dataSources }) => dataSources.clients.getHookSecrets(id)
   },
   RotationType: {
     NON_ROTATING: 'non-rotating' // TODO are there more types?

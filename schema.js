@@ -287,7 +287,7 @@ const typeDefs = gql`
         name: String!
         enabled: Boolean
         triggerId: HookTriggerIdType!
-        script: String!
+        script: String
         dependencies: JSON
     }
 
@@ -1108,7 +1108,7 @@ const typeDefs = gql`
     }
     
     input InputHook {
-        id: String!,
+        id: ID!
         triggerId: HookTriggerIdType!
         name: String!
         enabled: Boolean,
@@ -1118,12 +1118,32 @@ const typeDefs = gql`
 
     
     type Hook {
-        id: String!,
+        id: ID!
         triggerId: HookTriggerIdType!
         name: String!
         enabled: Boolean,
         script: String
         dependencies: JSON
+    }
+    
+    type HookSecrets {
+       id: ID!
+       secrets: Pair
+    }
+    
+    input InputHookSecretsAdd {
+        id: ID!
+        secrets: Pair!
+    }
+    
+    input InputHookSecretsUpdate {
+        id: ID!
+        secrets: Pair!
+    }
+
+    input InputHookSecretsDelete {
+        id: ID!
+        keys: [String]!
     }
 
     type ValidationOptions {
@@ -1306,6 +1326,10 @@ const typeDefs = gql`
         # instead of a OutPutGHookDelete.
         deleteHook(input: InputHook) : Hook
         updateHook(input: InputHook) : Hook
+        
+        addHookSecrets(input: InputHookSecretsAdd) : HookSecrets
+        updateHookSecrets(input: InputHookSecretsUpdate) : HookSecrets
+        deleteHookSecrets(input: InputHookSecretsDelete) : HookSecrets
 
     }
 
@@ -1339,6 +1363,7 @@ const typeDefs = gql`
         hooks: [Hook]!
         hooksByFilter(filter : InputHooksByFilter): [Hook]!
         hook(input: InputHook) : Hook
+        hookSecrets(id:ID): HookSecrets ! # TODO better way? PAIR? HASHMAP?
         
     }
 

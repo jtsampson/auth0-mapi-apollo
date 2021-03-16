@@ -489,6 +489,56 @@ class Connector {
   }
 
   /**
+   * Retrieve a hook's secrets by the ID of the hook.
+   * @param {string} id - the hook id
+   * @returns {Promise<{id: *, secrets: any}>}
+   * @see https://auth0.com/docs/api/management/v2#!/Hooks/get_secrets
+   */
+  getHookSecrets (id) {
+    return this.api.get(`/api/v2/hooks/${id}/secrets`).then(res => { return { id: id, secrets: res.data } })
+  }
+
+  /**
+   * Add one or more  secrets for an existing hook
+   * @param {object} secrets                 - the hook with secrets
+   * @param {string} secrets.id              - the hook id
+   * @param {object} secrets.secrets         - the hook secrets map to add an object of key-value pairs
+   * @returns {Promise<{id: *, secrets: *}>}
+   * @see https://auth0.com/docs/api/management/v2#!/Hooks/patch_secrets
+   */
+  addHookSecrets (secrets) {
+    return this.api.post(`/api/v2/hooks/${secrets.id}/secrets`, secrets.secrets)
+      .then(_res => this.getHookSecrets(secrets.id))
+  }
+
+  /**
+   * Update one or more existing secrets for an existing hook. Accepts an object of key-value pairs,
+   * where the key is the name of the existing secret.
+   * @param {object} secrets                 - the hook with secrets
+   * @param {string} secrets.id              - the hook id
+   * @param {object} secrets.secrets         - the hook secrets map to update an object of key-value pairse
+   * @returns {Promise<{id: *, secrets: *}>}
+   * @see https://auth0.com/docs/api/management/v2#!/Hooks/patch_secrets
+   */
+  updateHookSecrets (secrets) {
+    return this.api.patch(`/api/v2/hooks/${secrets.id}/secrets`, secrets.secrets)
+      .then(_res => this.getHookSecrets(secrets.id))
+  }
+
+  /**
+   * Delete one or more existing secrets for a given hook. Accepts an array of secret names to delete.
+   * @param {object} secrets      - the hook secrets to delete
+   * @param {string} secrets.id   - the hook secrets to delete
+   * @param {string} secrets.keys - the hook secrets keys to delete
+   * @returns {Promise<{id: *, secrets: *}>}
+   * @see https://auth0.com/docs/api/management/v2#!/Hooks/delete_secrets
+   */
+  deleteHookSecrets (secrets) {
+    return this.api.delete(`/api/v2/hooks/${secrets.id}/secrets`, secrets.keys)
+      .then(_res => this.getHookSecrets(secrets.id))
+  }
+
+  /**
    * Delete a hook.
    * @param {object} hook  - the hook
    * @param {string} hook.id  - the hook id to delete

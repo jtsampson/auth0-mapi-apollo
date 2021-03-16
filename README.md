@@ -22,13 +22,28 @@ I would like to get to a full implementation. If you would like to help out, ple
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-
-
 # Documentation
 * [Auth0 Management API V2](https://auth0.com/docs/api/management/v2)
 * [Apollo Graphql](https://www.apollographql.com/)
 
+# Design Considerations
 
+I compiled this list after the fact, so the api does not yet  hold up to these goals. 
+
+- Avoid use of JSON type when possible: if necessary, use and deprecate in liu of 
+- TODO: Use Paginated lists by default. 
+- Return affected objects as the result of mutation
+- Use single input objects for mutations
+- Create a schema that closely matches the api (to simplify development), this may change if I later
+  target the api towards a UI use case. for instance the Auth0 Dashboard.
+- Resolve all scope lists in connections resources (which can be returned as CSV or WSSV strings or arrays) to an array of strings
+- Use consistent naming conventions...
+  - Actions: Create/Update/Delete
+  - Child Types: (type)(type)
+  - Enums:  (type)Type
+  - Inputs:  Input(type)(action)
+  - Types:  Resource Name
+  
 # Issues
 * Testing  the get/update/delete for branding templates requires a paid auth0 plan. 
 * Need for pact tests
@@ -74,10 +89,10 @@ I would like to get to a full implementation. If you would like to help out, ple
 | Hooks              | Get a Hook                                             | hook                              |
 | Hooks              | Delete a Hook                                          | deleteHook                        |
 | Hooks              | Update a Hook                                          | updateHook                        |
-| Hooks              | Get Hook Secrets                                       | `TODO`                            |
-| Hooks              | Delete Hook Secrets                                    | `TODO`                            |
-| Hooks              | Update Hook Secrets                                    | `TODO`                            |
-| Hooks              | Add Hook Secrets                                       | `TODO`                            |
+| Hooks              | Get Hook Secrets                                       | hookSecrets                       |
+| Hooks              | Delete Hook Secrets                                    | deleteHookSecrets                 |
+| Hooks              | Update Hook Secrets                                    | updateHookSecrets                 |
+| Hooks              | Add Hook Secrets                                       | addHookSecrets                    |
 | Log Streams        | All                                                    | `TODO`                            |
 | Logs               | All                                                    | `TODO`                          |
 | Prompts            | All                                                    | `TODO`                          |
@@ -99,19 +114,6 @@ I would like to get to a full implementation. If you would like to help out, ple
 | Anomaly            | All                                                    | `TODO`                          |
 | Tickets            | All                                                    | `TODO`                          |
 
-# Design Considerations
-- Avoid use of JSON type when possible: if necessary, use and deprecate.
-- Use Paginated lists by default.
-- Return affected objects as the result of mutation
-- Use single input objects for mutations
-- Create a schema that closely matches the api
-- Resolve all scope lists in connections to arrays of strings
-- Use consistent naming conventions...
-    - Actions: Create/Update/Delete
-    - Child Types: (type)(type)
-    - Enums:  (type)Type
-    - Inputs:  Input(type)(action)
-    - Types:  Resource Name
 
 # License
  - [LICENSE](./LICENSE)
