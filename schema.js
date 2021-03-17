@@ -146,6 +146,19 @@ const typeDefs = gql`
         SEND_PHONE_MESSAGE
     }
 
+    enum LogStreamStatusType {
+        ACTIVE,
+        PAUSED,
+        SUSPENDED
+    }
+
+    enum LogStreamWebhookContentFormat {
+        JSONOBJECT,
+        JSONARRAY
+        JSONLINES
+    }
+
+
     enum OIDCChannelType {
         BACK_CHANNEL
         FRONT_CHANNEL
@@ -1131,6 +1144,76 @@ const typeDefs = gql`
        secrets: Pair
     }
     
+    interface LogStream {
+        id: ID!
+        name: String!
+        type: String!  # 'http', 'eventbridge', 'eventgrid', 'splunk', 'datadog', 'sumo'
+        status: LogStreamStatusType!
+    }
+    
+    type LogStreamEventBridge implements LogStream {
+        id: ID!
+        name: String!
+        type: String!
+        status: LogStreamStatusType!
+        # logstream specific
+        awsAccountId: String,
+        awsRegion: String,
+        awsPartnerEventSource: String
+    }
+    type LogStreamEventGrid implements LogStream{
+        id: ID!
+        name: String!
+        type: String!
+        status: LogStreamStatusType!
+        # logstream sink data
+        azureSubscriptionId: String,
+        azureResourceGroup: String,
+        azureRegion: String,
+        azurePartnerTopic: String
+    }
+    type LogStreamWebhook implements LogStream {
+        id: ID!
+        name: String!
+        type: String!
+        status: LogStreamStatusType!
+        # logstream sink data
+        httpContentFormat: LogStreamWebhookContentFormat,
+        httpContentType: String,
+        httpEndpoint: URL,
+        httpAuthorization: String
+    }
+    type LogStreamDataDog implements LogStream{
+        id: ID!
+        name: String!
+        type: String!
+        status: LogStreamStatusType!
+        # logstream sink data
+        datadogRegion: String
+        datadogApiKey: String
+    }
+    type LogStreamSplunk implements LogStream{
+        id: ID!
+        name: String!
+        type: String!
+        status: LogStreamStatusType!
+        # logstream sink data
+        splunkDomain: String,
+        splunkToken: String,
+        splunkPort: String,
+        splunkSecure: Boolean
+    }
+    
+    type LogStreamSumo implements LogStream{
+        id: ID!
+        name: String!
+        type: String!
+        status: LogStreamStatusType!
+        # logstream sink data
+        sumoSourceAddress: URL
+    }
+
+    
     input InputHookSecretsAdd {
         id: ID!
         secrets: Pair!
@@ -1363,8 +1446,10 @@ const typeDefs = gql`
         hooks: [Hook]!
         hooksByFilter(filter : InputHooksByFilter): [Hook]!
         hook(input: InputHook) : Hook
+        
         hookSecrets(id:ID): HookSecrets ! # TODO better way? PAIR? HASHMAP?
         
+        logStreams: [LogStream]!
     }
 
     type OutputGrantDelete {

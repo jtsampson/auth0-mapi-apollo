@@ -566,6 +566,10 @@ class Connector {
     return this.api.patch(`/api/v2/hooks/${hook.id}`, patch).then(res => res.data)
   }
 
+  getLogStreams () {
+    return this.api.get('/api/v2/log-streams').then(res => res.data)
+  }
+
   // TODO: fix this, it's not pretty.
   mungeClientFilter (filter) {
     filter = filter || {}

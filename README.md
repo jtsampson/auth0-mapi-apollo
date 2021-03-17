@@ -93,6 +93,7 @@ I compiled this list after the fact, so the api does not yet  hold up to these g
 | Hooks              | Delete Hook Secrets                                    | deleteHookSecrets                 |
 | Hooks              | Update Hook Secrets                                    | updateHookSecrets                 |
 | Hooks              | Add Hook Secrets                                       | addHookSecrets                    |
+| Log Streams        | get Log Stream                                         | logStream                         |
 | Log Streams        | All                                                    | `TODO`                            |
 | Logs               | All                                                    | `TODO`                          |
 | Prompts            | All                                                    | `TODO`                          |

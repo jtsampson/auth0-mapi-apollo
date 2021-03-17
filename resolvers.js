@@ -358,6 +358,60 @@ const resolvers = {
   },
   JSON: GraphQLJSON,
   JSONObject: GraphQLJSONObject,
+  LogStream: {
+    __resolveType ({ type }, context, info) {
+      switch (type) {
+        case 'datadog' : return 'LogStreamDataDog'
+        case 'eventbridge': return 'LogStreamEventBridge'
+        case 'eventgrid' : return 'LogStreamSinkEventGrid'
+        case 'http' : return 'LogStreamWebhook'
+        case 'splunk' :return 'LogStreamSplunk'
+        case 'sumo' :return 'LogStreamSumo'
+        default :
+          return null // GraphQLError is thrown
+      }
+    }
+  },
+  LogStreamDataDog: {
+    datadogRegion: ({ sink: { datadogRegion } }) => datadogRegion,
+    datadogApiKey: ({ sink: { datadogApiKey } }) => datadogApiKey
+  },
+  LogStreamEventBridge: {
+    awsAccountId: ({ sink: { awsAccountId } }) => awsAccountId,
+    awsRegion: ({ sink: { awsRegion } }) => awsRegion,
+    awsPartnerEventSource: ({ sink: { awsPartnerEventSource } }) => awsPartnerEventSource
+  },
+  LogStreamEventGrid: {
+    azureSubscriptionId: ({ sink: { azureSubscriptionId } }) => azureSubscriptionId,
+    azureResourceGroup: ({ sink: { azureResourceGroup } }) => azureResourceGroup,
+    azureRegion: ({ sink: { azureRegion } }) => azureRegion,
+    azurePartnerTopic: ({ sink: { azurePartnerTopic } }) => azurePartnerTopic
+  },
+  LogStreamWebhook: {
+    httpContentFormat: ({ sink: { httpContentFormat } }) => httpContentFormat,
+    httpContentType: ({ sink: { httpContentType } }) => httpContentType,
+    httpEndpoint: ({ sink: { httpEndpoint } }) => httpEndpoint,
+    httpAuthorization: ({ sink: { httpAuthorization } }) => httpAuthorization
+  },
+  LogStreamSplunk: {
+    splunkDomain: ({ sink: { splunkDomain } }) => splunkDomain,
+    splunkToken: ({ sink: { splunkToken } }) => splunkToken,
+    splunkPort: ({ sink: { splunkPort } }) => splunkPort,
+    splunkSecure: ({ sink: { splunkSecure } }) => splunkSecure
+  },
+  LogStreamSumo: {
+    sumoSourceAddress: ({ sink: { sumoSourceAddress } }) => sumoSourceAddress
+  },
+  LogStreamStatusType: {
+    ACTIVE: 'active',
+    PAUSED: 'paused',
+    SUSPENDED: 'suspended'
+  },
+  LogStreamWebhookContentFormat: {
+    JSONOBJECT: 'JSONOBJECT',
+    JSONARRAY: 'JSONLINES',
+    JSONLINES: 'JSONLINES'
+  },
   Mutation: {
     updateBranding: (_, { patches }, { dataSources }) => dataSources.clients.updateBranding(patches),
     updateBrandingTemplates: (_, { patches }, { dataSources }) => dataSources.clients.updateBrandingTemplates(patches),
@@ -408,7 +462,8 @@ const resolvers = {
     hooks: (_, __, { dataSources }) => dataSources.clients.getHooksByFilter({}),
     hooksByFilter: (_, { filter }, { dataSources }) => dataSources.clients.getHooksByFilter(filter),
     hook: (_, { input }, { dataSources }) => dataSources.clients.getHook(input),
-    hookSecrets: (_, { id }, { dataSources }) => dataSources.clients.getHookSecrets(id)
+    hookSecrets: (_, { id }, { dataSources }) => dataSources.clients.getHookSecrets(id),
+    logStreams: (_, __, { dataSources }) => dataSources.clients.getLogStreams()
   },
   RotationType: {
     NON_ROTATING: 'non-rotating' // TODO are there more types?
