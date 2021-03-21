@@ -419,7 +419,7 @@ class Connector {
    * @see https://auth0.com/docs/api/management/v2#!/Device_Credentials/delete_device_credentials_by_id
    */
   deleteDeviceCredential (id) {
-    // TODO in stead of passing back id as a confirm, we could do success fail, or get actual to delete, then passit back after 204, but that could expose and atach
+    // TODO in stead of passing back id as a confirm, we could do success fail, or get actual to delete, then pass it back after 204, but that could expose and attach
     return this.api.delete(`/api/v2/device-credentials/${id}`).then(_res => { return { id: id } })
   }
 
@@ -516,7 +516,7 @@ class Connector {
    * where the key is the name of the existing secret.
    * @param {object} secrets                 - the hook with secrets
    * @param {string} secrets.id              - the hook id
-   * @param {object} secrets.secrets         - the hook secrets map to update an object of key-value pairse
+   * @param {object} secrets.secrets         - the hook secrets map to update an object of key-value pairs
    * @returns {Promise<{id: *, secrets: *}>}
    * @see https://auth0.com/docs/api/management/v2#!/Hooks/patch_secrets
    */
@@ -562,12 +562,71 @@ class Connector {
    * @see https://auth0.com/docs/api/management/v2#!/Hooks/delete_hooks_by_id
    */
   updateHook (hook) {
+    // TODO can we do this with destructuring, like create LogStream
     const patch = this.omit(hook, this.patchFilters.hook)
     return this.api.patch(`/api/v2/hooks/${hook.id}`, patch).then(res => res.data)
   }
 
+  // noinspection JSCommentMatchesSignature
+  /**
+   * Creates a new log stream
+   * @input {Object} logStream        - the new log stream data
+   * @param {string} logStream.name   - the name of the log stream
+   * @param {string} logStream.type   - the type of log steam: determines the sink properties
+   * @param {Object} logStream.sink   - the log stream sink properties
+   * @returns {Promise<AxiosResponse<any>>}
+   * @see https://auth0.com/docs/api/management/v2#!/Log_Streams/post_log_streams
+   */
+  createLogStream ({ name, type, ...sink }) {
+    const payload = {
+      name: name,
+      type: type,
+      sink: sink
+    }
+    return this.api.post('/api/v2/log-streams', payload).then(res => res.data)
+  }
+
+  /**
+   * Retrieve a log stream configuration and status.
+   * @param {string} id the log stream id
+   * @returns {Promise<AxiosResponse<any>>}
+   */
+  getLogStream (id) {
+    return this.api.get(`/api/v2/log-streams/${id}`).then(res => res.data)
+  }
+
+  /**
+   * Retrieve details on log streams.
+   * @returns {Promise<AxiosResponse<any>>}
+   * @see https://auth0.com/docs/api/management/v2#!/Log_Streams/post_log_streams
+   */
   getLogStreams () {
     return this.api.get('/api/v2/log-streams').then(res => res.data)
+  }
+
+  deleteLogStream (id) {
+    return this.api.delete(`/api/v2/log-streams/${id}`)
+      .then(_res => { return { id: id } })
+  }
+
+  // noinspection JSCommentMatchesSignature
+  /**
+   * Creates a new log stream
+   * @input {Object} logStream        - the new log stream data
+   * @param {string} logStream.name   - the name of the log stream
+   * @param {string} logStream.type   - the type of log steam: determines the sink properties
+   * @param {Object} logStream.sink   - the log stream sink properties
+   * @returns {Promise<AxiosResponse<any>>}
+   * @see https://auth0.com/docs/api/management/v2#!/Log_Streams/post_log_streams
+   */
+  updateLogStream ({ id, name, status, ...sink }) {
+    const payload = {
+      name: name,
+      status: status,
+      ...(Object.keys(sink).length > 0) && { sink: sink } // add sink if exists.
+    }
+
+    return this.api.patch(`/api/v2/log-streams/${id}`, payload).then(res => res.data)
   }
 
   // TODO: fix this, it's not pretty.

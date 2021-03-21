@@ -47,6 +47,7 @@ I compiled this list after the fact, so the api does not yet  hold up to these g
 # Issues
 * Testing  the get/update/delete for branding templates requires a paid auth0 plan. 
 * Need for pact tests
+* Creation of LogStream for Event Grid seems require Azure Account...API complains about resource group name when creating from dashboard,
 
 # Mapping APIS to Query/Mutation
 
@@ -93,8 +94,11 @@ I compiled this list after the fact, so the api does not yet  hold up to these g
 | Hooks              | Delete Hook Secrets                                    | deleteHookSecrets                 |
 | Hooks              | Update Hook Secrets                                    | updateHookSecrets                 |
 | Hooks              | Add Hook Secrets                                       | addHookSecrets                    |
-| Log Streams        | get Log Stream                                         | logStream                         |
-| Log Streams        | All                                                    | `TODO`                            |
+| Log Streams        | Get Log Streams                                        | logStreams                        |
+| Log Streams        | Create a log Stream                                    | createLogStreamXXX                |
+| Log Streams        | Get log stream by ID                                   | logStream                         |
+| Log Streams        | Delete log stream                                      | deleteLogStream                   |
+| Log Streams        | update log stream                                      | updateLogStreamXXX                |
 | Logs               | All                                                    | `TODO`                          |
 | Prompts            | All                                                    | `TODO`                          |
 | Resource Servers   | All                                                    | `TODO`                          |

@@ -376,6 +376,10 @@ const resolvers = {
     datadogRegion: ({ sink: { datadogRegion } }) => datadogRegion,
     datadogApiKey: ({ sink: { datadogApiKey } }) => datadogApiKey
   },
+  LogStreamDataDogRegion: {
+    EU: 'eu',
+    US: 'us'
+  },
   LogStreamEventBridge: {
     awsAccountId: ({ sink: { awsAccountId } }) => awsAccountId,
     awsRegion: ({ sink: { awsRegion } }) => awsRegion,
@@ -387,25 +391,33 @@ const resolvers = {
     azureRegion: ({ sink: { azureRegion } }) => azureRegion,
     azurePartnerTopic: ({ sink: { azurePartnerTopic } }) => azurePartnerTopic
   },
-  LogStreamWebhook: {
-    httpContentFormat: ({ sink: { httpContentFormat } }) => httpContentFormat,
-    httpContentType: ({ sink: { httpContentType } }) => httpContentType,
-    httpEndpoint: ({ sink: { httpEndpoint } }) => httpEndpoint,
-    httpAuthorization: ({ sink: { httpAuthorization } }) => httpAuthorization
-  },
   LogStreamSplunk: {
     splunkDomain: ({ sink: { splunkDomain } }) => splunkDomain,
     splunkToken: ({ sink: { splunkToken } }) => splunkToken,
     splunkPort: ({ sink: { splunkPort } }) => splunkPort,
     splunkSecure: ({ sink: { splunkSecure } }) => splunkSecure
   },
-  LogStreamSumo: {
-    sumoSourceAddress: ({ sink: { sumoSourceAddress } }) => sumoSourceAddress
-  },
   LogStreamStatusType: {
     ACTIVE: 'active',
     PAUSED: 'paused',
     SUSPENDED: 'suspended'
+  },
+  LogStreamType: {
+    HTTP: 'http',
+    EVENT_BRIDGE: 'eventbridge',
+    EVENT_GRID: 'eventgrid',
+    SPLUNK: 'splunk',
+    DATADOG: 'datadog',
+    SUMO: 'sumo'
+  },
+  LogStreamSumo: {
+    sumoSourceAddress: ({ sink: { sumoSourceAddress } }) => sumoSourceAddress
+  },
+  LogStreamWebhook: {
+    httpContentFormat: ({ sink: { httpContentFormat } }) => httpContentFormat,
+    httpContentType: ({ sink: { httpContentType } }) => httpContentType,
+    httpEndpoint: ({ sink: { httpEndpoint } }) => httpEndpoint,
+    httpAuthorization: ({ sink: { httpAuthorization } }) => httpAuthorization
   },
   LogStreamWebhookContentFormat: {
     JSONOBJECT: 'JSONOBJECT',
@@ -433,7 +445,20 @@ const resolvers = {
     updateHook: (_, { input }, { dataSources }) => dataSources.clients.updateHook(input),
     addHookSecrets: (_, { input }, { dataSources }) => dataSources.clients.addHookSecrets(input),
     updateHookSecrets: (_, { input }, { dataSources }) => dataSources.clients.updateHookSecrets(input),
-    deleteHookSecrets: (_, { input }, { dataSources }) => dataSources.clients.deleteHookSecrets(input)
+    deleteHookSecrets: (_, { input }, { dataSources }) => dataSources.clients.deleteHookSecrets(input),
+    createLogStreamDataDog: (_, { input }, { dataSources }) => dataSources.clients.createLogStream({ ...input, type: 'datadog' }),
+    createLogStreamEventBridge: (_, { input }, { dataSources }) => dataSources.clients.createLogStream({ ...input, type: 'eventbridge' }),
+    createLogStreamEventGrid: (_, { input }, { dataSources }) => dataSources.clients.createLogStream({ ...input, type: 'eventgrid' }),
+    createLogStreamSplunk: (_, { input }, { dataSources }) => dataSources.clients.createLogStream({ ...input, type: 'splunk' }),
+    createLogStreamSumo: (_, { input }, { dataSources }) => dataSources.clients.createLogStream({ ...input, type: 'sumo' }),
+    createLogStreamWebhook: (_, { input }, { dataSources }) => dataSources.clients.createLogStream({ ...input, type: 'http' }),
+    deleteLogStream: (_, { id }, { dataSources }) => dataSources.clients.deleteLogStream(id),
+    updateLogStreamDataDog: (_, { input }, { dataSources }) => dataSources.clients.updateLogStream(input),
+    updateLogStreamEventBridge: (_, { input }, { dataSources }) => dataSources.clients.updateLogStream(input),
+    updateLogStreamEventGrid: (_, { input }, { dataSources }) => dataSources.clients.updateLogStream(input),
+    updateLogStreamSplunk: (_, { input }, { dataSources }) => dataSources.clients.updateLogStream(input),
+    updateLogStreamSumo: (_, { input }, { dataSources }) => dataSources.clients.updateLogStream(input),
+    updateLogStreamWebhook: (_, { input }, { dataSources }) => dataSources.clients.updateLogStream(input)
 
   },
   OIDCChannelType: {
@@ -463,7 +488,9 @@ const resolvers = {
     hooksByFilter: (_, { filter }, { dataSources }) => dataSources.clients.getHooksByFilter(filter),
     hook: (_, { input }, { dataSources }) => dataSources.clients.getHook(input),
     hookSecrets: (_, { id }, { dataSources }) => dataSources.clients.getHookSecrets(id),
+    logStream: (_, { id }, { dataSources }) => dataSources.clients.getLogStream(id),
     logStreams: (_, __, { dataSources }) => dataSources.clients.getLogStreams()
+
   },
   RotationType: {
     NON_ROTATING: 'non-rotating' // TODO are there more types?

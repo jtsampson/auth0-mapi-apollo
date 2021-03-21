@@ -146,6 +146,20 @@ const typeDefs = gql`
         SEND_PHONE_MESSAGE
     }
 
+    enum LogStreamDataDogRegion {
+        EU,
+        US
+    }
+    
+    enum LogStreamType {
+         HTTP
+         EVENT_BRIDGE
+         EVENT_GRID
+         SPLUNK
+         DATADOG
+         SUMO cx
+    }
+
     enum LogStreamStatusType {
         ACTIVE,
         PAUSED,
@@ -1106,6 +1120,9 @@ const typeDefs = gql`
     #      client_secret : String
     #    }
     
+    type OututLogStreamDeleted {
+        id: ID!
+    }
     type DeviceCredential {
         id : ID!
         client_id: String
@@ -1147,26 +1164,26 @@ const typeDefs = gql`
     interface LogStream {
         id: ID!
         name: String!
-        type: String!  # 'http', 'eventbridge', 'eventgrid', 'splunk', 'datadog', 'sumo'
+        type: LogStreamType!
         status: LogStreamStatusType!
     }
     
     type LogStreamEventBridge implements LogStream {
         id: ID!
         name: String!
-        type: String!
+        type: LogStreamType!
         status: LogStreamStatusType!
-        # logstream specific
-        awsAccountId: String,
-        awsRegion: String,
-        awsPartnerEventSource: String
+        # sink
+        awsAccountId: String!,
+        awsRegion: String!,
+        awsPartnerEventSource: String!  # Auto generated at create time
     }
     type LogStreamEventGrid implements LogStream{
         id: ID!
         name: String!
-        type: String!
+        type: LogStreamType!
         status: LogStreamStatusType!
-        # logstream sink data
+        # sink data
         azureSubscriptionId: String,
         azureResourceGroup: String,
         azureRegion: String,
@@ -1175,9 +1192,9 @@ const typeDefs = gql`
     type LogStreamWebhook implements LogStream {
         id: ID!
         name: String!
-        type: String!
+        type: LogStreamType!
         status: LogStreamStatusType!
-        # logstream sink data
+        # sink data
         httpContentFormat: LogStreamWebhookContentFormat,
         httpContentType: String,
         httpEndpoint: URL,
@@ -1186,34 +1203,131 @@ const typeDefs = gql`
     type LogStreamDataDog implements LogStream{
         id: ID!
         name: String!
-        type: String!
+        type: LogStreamType!
         status: LogStreamStatusType!
-        # logstream sink data
-        datadogRegion: String
-        datadogApiKey: String
+        # sink data
+        datadogRegion: LogStreamDataDogRegion!
+        datadogApiKey: String # e.g. aGkgbW9tCg
     }
+
     type LogStreamSplunk implements LogStream{
         id: ID!
         name: String!
-        type: String!
+        type: LogStreamType!
         status: LogStreamStatusType!
-        # logstream sink data
-        splunkDomain: String,
-        splunkToken: String,
-        splunkPort: String,
-        splunkSecure: Boolean
+        # sink data
+        splunkDomain: String, # Domain e.g. prd.mysplunk.splunkcloud.com
+        splunkToken: String,  # GUID ex: c3348c69-29f4-4c09-bad5-708c3d095f4a
+        splunkPort: Int,   # 8088
+        splunkSecure: Boolean # this is verify TLS toggle. 
     }
     
     type LogStreamSumo implements LogStream{
         id: ID!
         name: String!
-        type: String!
+        type: LogStreamType!
         status: LogStreamStatusType!
-        # logstream sink data
+        # sink data
+        sumoSourceAddress: URL
+    }
+    input InputLogStreamDataDogCreate {
+        name: String!
+        # sink data
+        datadogRegion: LogStreamDataDogRegion!
+        datadogApiKey: String!  # looks like a 10 char mixed case string
+    }
+    input InputLogStreamDelete {
+        id : ID!
+    }
+    
+    input InputLogStreamEventBridgeCreate {
+        name: String!
+        # logstream specific
+        awsAccountId: String!,  # AWS account ID: 12 digit number
+        awsRegion: String!,     # AWS Regions, don't want to put this in ENUM, "us-east-2"
+    }
+
+    input InputLogStreamEventGridCreate {
+        name: String!
+        # sink data
+        azureSubscriptionId: String!,  # Subscription ID: GUID 
+        azureResourceGroup: String!,   # Azure-Logs
+        azureRegion: String!          # 
+        #azurePartnerTopic: String!     #  Generated
+    }
+    
+    input InputLogStreamSplunkCreate {
+        name: String!
+        # sink data
+        splunkDomain: String!,  # The domain name of your Splunk instance with an HTTP Event Collector enabled.
+        splunkToken: String!,   # Your Splunk event collector token. A guid
+        splunkPort: Int!,       # Default is 8088
+        splunkSecure: Boolean!  # Verify TLS Toggle in UI: true 
+    }
+    input InputLogStreamSumoCreate{
+        name: String!
+        # sink data
+        sumoSourceAddress: URL
+    }
+    input InputLogStreamWebhookCreate {
+        name: String!
+        # sink data
+        httpContentFormat: LogStreamWebhookContentFormat!,
+        httpContentType: String!,     # Content Type e.g. application/json
+        httpEndpoint: URL!,           # Payload URL, e.g https://path.to.api/webhooks/incomming
+        httpAuthorization: String!    # Authorization Token
+    }
+
+    input InputLogStreamDataDogUpdate {
+        id: ID!
+        name: String
+        status: LogStreamStatusType
+        # sink data
+        datadogRegion: LogStreamDataDogRegion
+        datadogApiKey: String
+    }
+    input InputLogStreamEventBridgeUpdate {
+        id: ID!
+        name: String
+        status: LogStreamStatusType
+        # API toes not allow sink data nupdate for event bridge
+    }
+
+    input InputLogStreamEventGridUpdate {
+        id: ID!
+        name: String
+        status: LogStreamStatusType
+        # API toes not allow sink data nupdate for event grid
+    }
+
+    input InputLogStreamSplunkUpdate {
+        id: ID!
+        name: String
+        status: LogStreamStatusType
+        # sink data
+        splunkDomain: String,
+        splunkToken: String,
+        splunkPort: Int,
+        splunkSecure: Boolean
+    }
+    input InputLogStreamSumoUpdate{
+        id: ID!
+        name: String
+        status: LogStreamStatusType
+        # sink data
         sumoSourceAddress: URL
     }
 
-    
+    input InputLogStreamWebhookUpdate {
+        id: ID!
+        name: String!
+        status: LogStreamStatusType!
+        # sink data
+        httpContentFormat: LogStreamWebhookContentFormat!,
+        httpContentType: String!,
+        httpEndpoint: URL!,
+        httpAuthorization: String!
+    }
     input InputHookSecretsAdd {
         id: ID!
         secrets: Pair!
@@ -1414,6 +1528,19 @@ const typeDefs = gql`
         updateHookSecrets(input: InputHookSecretsUpdate) : HookSecrets
         deleteHookSecrets(input: InputHookSecretsDelete) : HookSecrets
 
+        createLogStreamDataDog(input : InputLogStreamDataDogCreate) : LogStream
+        createLogStreamEventBridge(input : InputLogStreamEventBridgeCreate) : LogStream
+        createLogStreamEventGrid(input : InputLogStreamEventGridCreate) : LogStream
+        createLogStreamSplunk(input : InputLogStreamSplunkCreate) : LogStream
+        createLogStreamSumo(input : InputLogStreamSumoCreate) : LogStream
+        createLogStreamWebhook(input : InputLogStreamWebhookCreate) : LogStream
+        deleteLogStream(id:ID!) : OututLogStreamDeleted
+        updateLogStreamDataDog(input : InputLogStreamDataDogUpdate) : LogStream
+        updateLogStreamEventBridge(input : InputLogStreamEventBridgeUpdate) : LogStream
+        updateLogStreamEventGrid(input : InputLogStreamEventGridUpdate) : LogStream
+        updateLogStreamSplunk(input : InputLogStreamSplunkUpdate) : LogStream
+        updateLogStreamSumo(input : InputLogStreamSumoUpdate) : LogStream
+        updateLogStreamWebhook(input : InputLogStreamWebhookUpdate) : LogStream
     }
 
     # ------------------
@@ -1449,6 +1576,7 @@ const typeDefs = gql`
         
         hookSecrets(id:ID): HookSecrets ! # TODO better way? PAIR? HASHMAP?
         
+        logStream(id:ID): LogStream
         logStreams: [LogStream]!
     }
 
