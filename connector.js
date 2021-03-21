@@ -107,15 +107,56 @@ class Connector {
     }
   }
 
-  // -----------------------
-  // Branding
-  // -----------------------
+  /**
+   * Retrieve an API (also known as resource server).
+   * @param {string} id - the id of the api to get
+   * @returns {Promise<AxiosResponse<any>>}
+   */
+  apiById (id) {
+    return this.api.get(`/api/v2/resource-servers/${id}`).then(res => res.data)
+  }
 
   /**
-   * Get Branding Settings.
-   * @returns {Promise<*>}
-   * @see https://auth0.com/docs/api/management/v2#!/Branding/get_branding
+    * Retrieve APIs (also known as resource servers) that you can consume from your authorized applications.
+    * @param filter
+    * @param {number}  filter.[page]           - Page index of the results to return. First page is 0.
+    * @param {number}  filter.[per_page]       - Number of results per page. Paging is disabled if not set
+    * @returns {Promise<AxiosResponse<any>>}
+    */
+  apisByFilter (filter) {
+    return this.api.get('/api/v2/resource-servers', { params: filter }).then(res => res.data)
+  }
+
+  /**
+   * Create a new API (also known as a resource server).
+   * @param input - the api
+   * @returns {Promise<AxiosResponse<any>>}
+   * @see https://auth0.com/docs/api/management/v2#!/Resource_Servers/post_resource_servers
    */
+  apiCreate (input) {
+    return this.api.post('/api/v2/resource-servers', input).then(res => res.data)
+  }
+
+  /**
+   * Delete an existing API (also known as a resource server).
+   * @param {string} id - the id of the api to delete
+   * @returns {Promise<{id: string|*}>}
+   */
+  apiDelete (id) {
+    return this.api.delete(`/api/v2/resource-servers/${id}`).then(_res => { return { id: id } })
+  }
+
+  /**
+   * Update an existing API (also known as a resource server).
+   * @param {object} api         - the api
+   * @param {string} api.id      - the api id
+   * @param {object} api.payload - the api patch
+   * @returns {Promise<AxiosResponse<any>>}
+   */
+  apiUpdate ({ id, ...payload }) {
+    return this.api.patch(`/api/v2/resource-servers/${id}`, payload).then(res => res.data)
+  }
+
   getBranding () {
     return this.api.get('/api/v2/branding').then(res => res.data)
   }
@@ -629,7 +670,7 @@ class Connector {
     return this.api.patch(`/api/v2/log-streams/${id}`, payload).then(res => res.data)
   }
 
-  // TODO: fix this, it's not pretty.
+  // TODO: fix this, it's not pretty can probably do in a line using desctruct?
   mungeClientFilter (filter) {
     filter = filter || {}
     if (filter.app_type) {

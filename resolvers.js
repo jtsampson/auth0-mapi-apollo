@@ -13,6 +13,7 @@ const resolveScopeFromCommaSeparatedList = ({ scope }) => !scope ? [] : scope.sp
 /* eslint-disable camelcase */
 
 const resolvers = {
+
   AddOnType: {
     AWS: 'aws',
     AZURE_BLOB: 'azure_blob',
@@ -44,7 +45,15 @@ const resolvers = {
     ZENDESK: 'zendesk',
     ZOOM: 'zoom'
   },
-
+  Api: {
+    enforce_policies: ({ enforce_policies = false }) => enforce_policies, // default false if not set
+    is_system: ({ is_system = false }) => is_system, // default false if not set
+    scopes: ({ scopes = [] }) => scopes // default empty
+  },
+  ApiSigningAlgorythmType: {
+    RS256: 'RS256',
+    HS256: 'HS256'
+  },
   AppType: {
     REGULAR_WEB: 'regular_web',
     SINGLE_PAGE: 'spa',
@@ -425,6 +434,9 @@ const resolvers = {
     JSONLINES: 'JSONLINES'
   },
   Mutation: {
+    apiCreate: (_, { input }, { dataSources }) => dataSources.clients.apiCreate(input),
+    apiUpdate: (_, { input }, { dataSources }) => dataSources.clients.apiUpdate(input),
+    apiDelete: (_, { id }, { dataSources }) => dataSources.clients.apiDelete(id),
     updateBranding: (_, { patches }, { dataSources }) => dataSources.clients.updateBranding(patches),
     updateBrandingTemplates: (_, { patches }, { dataSources }) => dataSources.clients.updateBrandingTemplates(patches),
     deleteBrandingTemplates: (_, __, { dataSources }) => dataSources.clients.deleteBrandingTemplates(),
@@ -468,6 +480,9 @@ const resolvers = {
   Pair: Pair,
 
   Query: {
+    apiById: (_, { id }, { dataSources }) => dataSources.clients.apiById(id),
+    apis: (_, __, { dataSources }) => dataSources.clients.apisByFilter({}),
+    apisByFilter: (_, { filter }, { dataSources }) => dataSources.clients.apisByFilter(filter),
     branding: (_, __, { dataSources }) => dataSources.clients.getBranding(),
     brandingTemplates: (_, __, { dataSources }) => dataSources.clients.getBrandingTemplates(),
     client: (_, { id }, { dataSources }) => dataSources.clients.getClient(id),
@@ -502,10 +517,18 @@ const resolvers = {
     GOOD: 'good',
     EXCELLENT: 'excellent'
   },
+  TokenDialectType: {
+    ACCESS_TOKEN: 'access_token',
+    ACCESS_TOKEN_AUTHZ: 'access_token_authz'
+  },
   TokenEndpointAuthMethod: {
     BASIC: 'client_secret_basic',
     NONE: 'none',
     POST: 'client_secret_post'
+  },
+  UniversalLoginExperience: {
+    NEW: 'new',
+    CLASSIC: 'classic'
   },
   URL: GraphQLURL
 }

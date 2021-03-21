@@ -99,9 +99,13 @@ I compiled this list after the fact, so the api does not yet  hold up to these g
 | Log Streams        | Get log stream by ID                                   | logStream                         |
 | Log Streams        | Delete log stream                                      | deleteLogStream                   |
 | Log Streams        | update log stream                                      | updateLogStreamXXX                |
-| Logs               | All                                                    | `TODO`                          |
-| Prompts            | All                                                    | `TODO`                          |
-| Resource Servers   | All                                                    | `TODO`                          |
+| Logs               | All                                                    | Not Supported                     |
+| Prompts            | All                                                    | Not Supported                     |
+| Resource Servers   | Get Resource Servers                                   | apis, apisByFilter                |
+| Resource Servers   | Get Resource Server                                    | apiById                           |
+| Resource Servers   | Create Resource Server                                 | apiCreate                         |
+| Resource Servers   | Update Resource Server                                 | apiUpdate                         |
+| Resource Servers   | Delete Resource Server                                 | apiDelete                         |
 | Roles              | All                                                    | `TODO`                          |
 | Rules              | All                                                    | `TODO`                          |
 | Rule Configs       | All                                                    | `TODO`                          |

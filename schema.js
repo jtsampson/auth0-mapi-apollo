@@ -36,6 +36,11 @@ const typeDefs = gql`
     ZENDESK
     ZOOM
   }
+  
+  enum ApiSigningAlgorythmType {
+    RS256
+    HS256
+  }
 
   enum AppType {
     MACHINE_TO_MACHINE # non_interactive
@@ -128,6 +133,34 @@ const typeDefs = gql`
     REFRESH_TOKEN
     ROTATING_REFRESH_TOKEN
   }
+  
+  enum PROMPT {
+    COMMON #: 'common'
+    CONSENT #: 'consent'
+    DEVICE_FLOW #: 'device-flow'
+    EMAIL_OTP_CHALLENGE #: 'email-otp-challenge'
+    EMAIL_VERIFICATION #: 'email-verification'
+    INVITATAION #: 'invitation'
+    LOGIN #: 'LOGIN # : 'login'
+    LOGIN_ID #: 'login-id'
+    LOGIN_EMAIL #: 'login-email-verification'
+    LOGIN_PASSWORD #: 'login-password'
+    MFA #: 'mfa'
+    MFA_EMAIL#: 'mfa-email'
+    MFA_OTP #: 'mfa-otp'
+    MFA_PHONE #: 'mfa-phone'
+    MFA_PUSH #: 'mfa-push'
+    MFA_RECOVERY #: 'mfa-recovery-code'
+    MFA_SMS #: 'mfa-sms'
+    MFA_VOICE #: 'mfa-voice'
+    MFA_WEBAUTHN #: 'mfa-webauthn'
+    ORGANIZATIONS #: 'organizations'
+    RESET_PASSWORDS #: 'reset-password'
+    SIGNUP #: 'signup'
+    SIGNUP_ID #: 'signup-id'
+    SIGN_UP_PASSWORD #: 'signup-password'
+    STATUS #: 'status'
+  }
 
   enum ExpirationType {
     NON_EXPIRING
@@ -198,16 +231,70 @@ const typeDefs = gql`
     NONE
     BASIC
   }
+  
+  enum TokenDialectType {
+    ACCESS_TOKEN       # : 'access_token'
+    ACCESS_TOKEN_AUTHZ #: 'access_token_authz'
+  }
 
   enum TokenEndpointAuthMethod {
     NONE
     POST
     BASIC
   }
+  
+  enum UniversalLoginExperience {
+    NEW
+    CLASSIC
+  }
 
   # ------------------
   # inputs 
   # ------------------
+
+  input ApiByFilterInput {
+    page : Int
+    per_page : Int
+  }
+
+  input ApiCreateInput {
+    #required
+    name: String!
+    identifier: String!
+    signing_alg: ApiSigningAlgorythmType!
+    #optional
+    allow_offline_access: Boolean
+    client: JSON       # not sure what this is.
+    enforce_policies: Boolean
+    scopes: [ApiScopeInput]
+    signing_secret: String
+    skip_consent_for_verifiable_first_party_clients: Boolean
+    token_dialect:  TokenDialectType
+    token_lifetime: Int
+    token_lifetime_for_web: Int
+  }
+
+  input ApiUpdateInput {
+    # identifier not allowed on update should check on is_xyz
+    id: ID!
+    #optional
+    allow_offline_access: Boolean
+    client: JSON       # not sure what this is.
+    enforce_policies: Boolean
+    name: String
+    scopes: [ApiScopeInput]
+    signing_alg: ApiSigningAlgorythmType
+    signing_secret: String
+    skip_consent_for_verifiable_first_party_clients: Boolean
+    token_dialect:  TokenDialectType
+    token_lifetime: Int
+    token_lifetime_for_web: Int
+  }
+
+  input ApiScopeInput{
+    description: String
+    value: String
+  }
 
   input BrandingColorsUpdateInput {
     primary : HCC
@@ -1400,8 +1487,10 @@ const typeDefs = gql`
     httpEndpoint: URL,
     httpAuthorization: String
   }
-
-
+  
+  type OutputApiDelete {
+    id: ID
+  }
   type OutputClientDelete {
     client_id: ID!
   }
@@ -1455,6 +1544,33 @@ const typeDefs = gql`
     end: HCC     # '#000000'
     angle_deg: Int # 35
   }
+  
+  type Prompt {
+      universal_login_experience: String!
+  }
+
+  type Api {
+    id: ID!
+    name: String!
+    identifier: String!
+    signing_alg: ApiSigningAlgorythmType!
+    
+    allow_offline_access: Boolean
+    client: JSON       # not sure what this is.
+    enforce_policies: Boolean
+    is_system: Boolean! # Read Only
+    scopes: [ApiScope]!
+    signing_secret: String
+    skip_consent_for_verifiable_first_party_clients: Boolean
+    token_dialect:  TokenDialectType
+    token_lifetime: Int
+    token_lifetime_for_web: Int
+  }
+
+  type ApiScope{
+    description: String
+    value: String!
+  }
 
 
 
@@ -1462,10 +1578,11 @@ const typeDefs = gql`
   # ------------------
   # mutations 
   # ----------------
-  # TODO: consider this direction https://stackoverflow.com/questions/44120314/result-of-a-delete-mutation 
-  # TODO: related to seperate input and output types
-  # TODO: consider adding 'id' to 'payload' for sake of api for updates.
   type Mutation{
+    apiCreate(input: ApiCreateInput): Api
+    apiDelete(id:ID!): OutputApiDelete
+    apiUpdate(input: ApiUpdateInput) : Api
+    
     updateBranding( patches: BrandingUpdateInput): Branding
     updateBrandingTemplates ( patches: BrandingTemplatesUpdateInput): BrandingTemplates
     deleteBrandingTemplates : BrandingTemplates
@@ -1516,6 +1633,10 @@ const typeDefs = gql`
   # querys
   # ------------------
   type Query {
+    apiById(id: ID!) : Api!
+    apis: [Api]!
+    apisByFilter(input: ApiByFilterInput) : [Api]!
+    
     branding: Branding
     brandingTemplates: BrandingTemplates
     
