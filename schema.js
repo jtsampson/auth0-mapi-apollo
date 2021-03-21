@@ -501,11 +501,6 @@ const typeDefs = gql`
   # ------------------
   # types 
   # ------------------
-  type AndroidClient {
-    app_package_name: String
-    sha256_cert_fingerprints : [String]
-  }
-
   type Branding {
     colors: BrandingColors
     favicon_url : URL
@@ -525,7 +520,49 @@ const typeDefs = gql`
   type BrandingTemplates {
     universal_login : String
   }
+  
+  type Client{
+    client_id: ID!
+    # alphabetic below
 
+    addons : ClientAddOns
+    allowed_clients : [String]
+    allowed_logout_urls : [URL]
+    allowed_origins: [String] # TODO Maybe use URL?
+    app_type: AppType
+    callback_url_template: Boolean!
+    callbacks : [URL]
+    client_aliases: [String]
+    client_metadata : Pair # TODO or perhaps JSON?
+    client_secret: String # only available with grant
+    cross_origin_auth: Boolean
+    cross_origin_loc: URL
+    custom_login_page: String
+    custom_login_page_on: Boolean!
+    custom_login_page_preview: String
+    description : String
+    #encrypted: Boolean #TODO is this used?
+    encryption_key : ClientEncryptionKey
+    form_template : String
+    global: Boolean!
+    grant_types: [GrantType]!
+    initiate_login_uri : String
+    is_first_party: Boolean!
+    is_token_endpoint_ip_header_trusted: Boolean
+    jwt_configuration   : ClientJWTConfiguration
+    logo_uri : URL
+    mobile : ClientMobile
+    name: String!
+    # native_social_Logins # TODO 
+    oidc_conformant: Boolean!
+    refresh_token : ClientRefreshToken
+    signing_keys: ClientSigningKeys
+    sso: Boolean
+    sso_disabled: Boolean
+    tenant: String!
+    token_endpoint_auth_method : TokenEndpointAuthMethod
+    web_origins : [String]
+  }
 
   type ClientAddOns{
     aws : JSON
@@ -557,50 +594,51 @@ const typeDefs = gql`
     wsfed : JSON
     zendesk : JSON
     zoom : JSON
-  },
+  }
 
-  type Client {
-    client_id: ID!
-    # alphabetic below
+  type ClientEncryptionKey {
+    pub: String
+    cert: String
+    subject:String
+  }
 
-    addons : ClientAddOns
-    allowed_clients : [String]
-    allowed_logout_urls : [URL]
-    allowed_origins: [String] # TODO Maybe use URL?
-    app_type: AppType
-    callback_url_template: Boolean!
-    callbacks : [URL]
-    client_aliases: [String]
-    client_metadata : Pair # TODO or perhaps JSON?
-    client_secret: String # only available with grant
-    cross_origin_auth: Boolean
-    cross_origin_loc: URL
-    custom_login_page: String
-    custom_login_page_on: Boolean!
-    custom_login_page_preview: String
-    description : String
-    #encrypted: Boolean #TODO is this used?
-    encryption_key : EncryptionKeyClient
-    form_template : String
-    global: Boolean!
-    grant_types: [GrantType]!
-    initiate_login_uri : String
-    is_first_party: Boolean!
-    is_token_endpoint_ip_header_trusted: Boolean
-    jwt_configuration   : JWTConfigurationClient
-    logo_uri : URL
-    mobile : MobileClient
-    name: String!
-    # native_social_Logins # TODO 
-    oidc_conformant: Boolean!
-    refresh_token : RefreshTokenClient
-    signing_keys: SigningKeysClient
-    sso: Boolean
-    sso_disabled: Boolean
-    tenant: String!
-    token_endpoint_auth_method : TokenEndpointAuthMethod
-    web_origins : [String]
+  type ClientJWTConfiguration  {
+    lifetime_in_seconds: Int
+    secret_encoded: Boolean!
+    #TODO add scopes?
+    #scopes: {}, 
+    alg:String # TODO could be ENUM 'HS256' or 'RS256'
+  }
+  
+  type ClientMobile {
+    android : ClientMobileAndroid
+    ios : ClientMobileIOS
+  }
 
+  type ClientMobileAndroid{
+    app_package_name: String
+    sha256_cert_fingerprints : [String]
+  }
+  
+  type ClientMobileIOS {
+    team_id: String
+    app_bundle_identifier :String
+  }
+
+  type ClientRefreshToken {
+    expiration_type: ExpirationType
+    idle_token_lifetime : Int
+    infinite_idle_token_lifetime: Boolean
+    infinite_token_lifetime: Int
+    leeway: Int
+    rotation_type: RotationType
+    token_lifetime: Int
+  }
+
+  type ClientSigningKeys {
+    cert: String
+    pkcs7: String
+    subject: String
   }
 
   type ClientGrant {
@@ -632,9 +670,8 @@ const typeDefs = gql`
   # ------------------
   type ConnectionOptionsApple {
     scope: [String]! # scope is stored as a white space seperated string
-    # TODO does this have 'profile:'? could default to false.
     client_id:String
-    app_secret: String # TODO could this be renamed to client_secret?
+    app_secret: String
     set_user_root_attributes: Boolean
     # Additional Properties
     email: Boolean,
@@ -662,7 +699,6 @@ const typeDefs = gql`
   }
 
   type ConnectionOptionsBitBucket {
-    # TODO scope:  not here, but could be added an always empty.
     profile: Boolean
     client_id: String
     client_secret: String
@@ -671,7 +707,6 @@ const typeDefs = gql`
   }
 
   type ConnectionOptionsBox {
-    # TODO scope:  not here, but could be added an always empty.
     profile: Boolean
     client_id: String
     client_secret: String
@@ -679,7 +714,6 @@ const typeDefs = gql`
   }
 
   type ConnectionOptionsDAccount {
-    # TODO scope:  not here, but could be added an always empty.
     profile: Boolean
     client_id: String
     client_secret: String
@@ -688,7 +722,6 @@ const typeDefs = gql`
 
   type ConnectionOptionsOAuth2 {
     scope: [String]! # this is returned by api as a single string e,g, scope: "read" but we'll convert to array.
-    # TODO does this have 'profile:'? could default to false.
     client_id: String
     client_secret: String
     set_user_root_attributes: Boolean
@@ -709,7 +742,6 @@ const typeDefs = gql`
 
   type ConnectionOptionsDWolla {
     scope: [String]!
-    # TODO does this have 'profile:'? could default to false.
     client_id: String
     client_secret: String
     set_user_root_attributes: Boolean
@@ -727,7 +759,6 @@ const typeDefs = gql`
   }
 
   type ConnectionOptionsDropBox {
-    # TODO scope:  not here, but could be added an always empty.
     profile: Boolean
     client_id: String
     client_secret: String
@@ -735,7 +766,6 @@ const typeDefs = gql`
   }
 
   type ConnectionOptionsEvernote {
-    # TODO scope:  not here, but could be added an always empty.
     profile: Boolean
     client_id: String
     client_secret: String
@@ -743,7 +773,6 @@ const typeDefs = gql`
   }
 
   type ConnectionOptionsEvernoteSandbox {
-    # TODO scope:  not here, but could be added an always empty.
     profile: Boolean
     client_id: String
     client_secret: String
@@ -751,7 +780,6 @@ const typeDefs = gql`
   }
 
   type ConnectionOptionsExact {
-    # TODO scope:  not here, but could be added an always empty.
     profile: Boolean
     client_id: String
     client_secret: String
@@ -762,12 +790,10 @@ const typeDefs = gql`
   }
 
   type ConnectionOptionsFacebook {
-    scope: [String]! # TODO  scope is stored as a csv string in auth0 
-    # TODO does this have 'profile:'? could default to false.
+    scope: [String]! # TODO  scope is stored as a csv string in auth0
     client_id: String
     client_secret: String
     set_user_root_attributes: Boolean
-
     #additional properties
     ads_management: Boolean
     ads_read: Boolean
@@ -818,7 +844,6 @@ const typeDefs = gql`
     client_id: String
     client_secret: String,
     set_user_root_attributes: Boolean
-
     # additional properties
     activity: Boolean
     heartrate: Boolean
@@ -837,7 +862,6 @@ const typeDefs = gql`
     client_id: String,
     client_secret: String
     set_user_root_attributes: Boolean
-
     # additional Properties
     admin_org: Boolean
     admin_public_key: Boolean
@@ -908,7 +932,6 @@ const typeDefs = gql`
     client_id: String # AKA channel id
     client_secret: String # AKA chanel Secret
     set_user_root_attributes: Boolean
-
     #additional Properties
     email: Boolean
   }
@@ -919,7 +942,6 @@ const typeDefs = gql`
     client_id: String
     client_secret: String
     set_user_root_attributes: Boolean
-
     # additional properties
     basic_profile: Boolean
     email: Boolean
@@ -932,7 +954,6 @@ const typeDefs = gql`
     client_id:String
     client_secret: String
     set_user_root_attributes: Boolean
-
     # additional properties
     address: Boolean
     email: Boolean
@@ -945,7 +966,6 @@ const typeDefs = gql`
     client_id:String
     client_secret: String
     set_user_root_attributes: Boolean
-
     # additional properties
     address: Boolean
     email: Boolean
@@ -1020,7 +1040,6 @@ const typeDefs = gql`
 
   type ConnectionOptionsThirtySevenSignals {
     # AKA Base Camp
-    # TODO scope:  not here, but could be added an always empty.
     profile: Boolean
     client_id: String
     client_secret: String
@@ -1029,7 +1048,6 @@ const typeDefs = gql`
   }
 
   type ConnectionOptionsTwitter {
-    # TODO scope:  not here, but could be added an always empty.
     client_id: String
     client_secret: String
     profile: Boolean
@@ -1066,7 +1084,6 @@ const typeDefs = gql`
   }
 
   type ConnectionOptionsYandex {
-    # TODO scope:  not here, but could be added an always empty.
     profile: Boolean
     client_id: String
     client_secret: String
@@ -1074,7 +1091,6 @@ const typeDefs = gql`
   }
 
   type ConnectionOptionsYammer {
-    # TODO scope:  not here, but could be added an always empty.
     profile: Boolean
     client_id: String
     client_secret: String
@@ -1104,10 +1120,7 @@ const typeDefs = gql`
     client_secret: String
     set_user_root_attributes: Boolean
   }
-
-
-
-
+  
   # ------------------
   # Enterprise Connections
   # ------------------
@@ -1117,15 +1130,48 @@ const typeDefs = gql`
     disable_signup : Boolean
     enable_database_customization : Boolean #verify this is a property
     import_mode : Boolean
-    mfa : MFA
+    mfa : ConnectionOptionsAuth0MFA
     password_policy : StrengthLevel
-    password_complexity_options : PasswordComplexityOptions
-    password_dictionary : PasswordDictionary
-    password_history : PasswordHistory
-    password_no_personal_info : PasswordNoPersonalInfo
+    password_complexity_options : ConnectionOptionsAuth0PasswordComplexityOptions
+    password_dictionary : ConnectionOptionsAuth0PasswordDictionary
+    password_history : ConnectionOptionsAuth0PasswordHistory
+    password_no_personal_info : ConnectionOptionsAuth0PasswordNoPersonalInfo
     requires_username : Boolean
     custom_scripts : String
-    validation : ValidationOptions
+    validation : ConnectionOptionsAuth0ValidationOptions
+  }
+
+  type ConnectionOptionsAuth0PasswordComplexityOptions {
+    min_length : Int
+  }
+
+  type ConnectionOptionsAuth0PasswordDictionary {
+    enable : Boolean
+    dictionary : [String]!
+  }
+
+  type ConnectionOptionsAuth0PasswordHistory {
+    enable : Boolean
+    size : Int
+  }
+
+  type ConnectionOptionsAuth0PasswordNoPersonalInfo {
+    enable : Boolean
+  }
+  
+
+  type ConnectionOptionsAuth0MFA {
+    active: Boolean
+    return_enroll_settings : Boolean
+  }
+
+  type ConnectionOptionsAuth0ValidationOptions {
+    username : ConnectionOptionsAuth0ValidationOptionsUserName
+  }
+
+  type  ConnectionOptionsAuth0ValidationOptionsUserName {
+    min: Int
+    max: Int
   }
 
   type ConnectionOptionsOIDC {
@@ -1185,7 +1231,6 @@ const typeDefs = gql`
 
   type ConnectionOptionsWindowsLive {
     scope:  [String]
-    # TODO does this have 'profile:'? could default to false. is this social?
     client_id: String
     client_secret: String
     # TODO are we missing   set_user_root_attributes: Boolean
@@ -1251,9 +1296,7 @@ const typeDefs = gql`
   #      client_secret : String
   #    }
 
-  type OututLogStreamDeleted {
-    id: ID!
-  }
+
   type DeviceCredential {
     id : ID!
     client_id: String
@@ -1262,7 +1305,16 @@ const typeDefs = gql`
     type : DeviceCredentialType
     user_id : String
   }
-  
+
+  type Grant {
+    id : ID!
+    audience : String
+    clientID : String
+    scope: [String]!
+    user_id : String
+  }
+
+
   type Hook {
     id: ID!
     triggerId: HookTriggerIdType!
@@ -1284,12 +1336,22 @@ const typeDefs = gql`
     status: LogStreamStatusType!
   }
 
+  type LogStreamDataDog implements LogStream{
+    id: ID!
+    name: String!
+    type: LogStreamType!
+    status: LogStreamStatusType!
+    # sink data
+    datadogRegion: LogStreamDataDogRegion!
+    datadogApiKey: String # e.g. aGkgbW9tCg
+  }
+
   type LogStreamEventBridge implements LogStream {
     id: ID!
     name: String!
     type: LogStreamType!
     status: LogStreamStatusType!
-    # sink
+    # sink data
     awsAccountId: String!,
     awsRegion: String!,
     awsPartnerEventSource: String!  # Auto generated at create time
@@ -1305,27 +1367,7 @@ const typeDefs = gql`
     azureRegion: String,
     azurePartnerTopic: String
   }
-  type LogStreamWebhook implements LogStream {
-    id: ID!
-    name: String!
-    type: LogStreamType!
-    status: LogStreamStatusType!
-    # sink data
-    httpContentFormat: LogStreamWebhookContentFormat,
-    httpContentType: String,
-    httpEndpoint: URL,
-    httpAuthorization: String
-  }
-  type LogStreamDataDog implements LogStream{
-    id: ID!
-    name: String!
-    type: LogStreamType!
-    status: LogStreamStatusType!
-    # sink data
-    datadogRegion: LogStreamDataDogRegion!
-    datadogApiKey: String # e.g. aGkgbW9tCg
-  }
-
+  
   type LogStreamSplunk implements LogStream{
     id: ID!
     name: String!
@@ -1334,7 +1376,7 @@ const typeDefs = gql`
     # sink data
     splunkDomain: String, # Domain e.g. prd.mysplunk.splunkcloud.com
     splunkToken: String,  # GUID ex: c3348c69-29f4-4c09-bad5-708c3d095f4a
-    splunkPort: Int,   # 8088
+    splunkPort: Int,      # 8088
     splunkSecure: Boolean # this is verify TLS toggle. 
   }
 
@@ -1347,33 +1389,18 @@ const typeDefs = gql`
     sumoSourceAddress: URL
   }
 
-  type MFA {
-    active: Boolean
-    return_enroll_settings : Boolean
+  type LogStreamWebhook implements LogStream {
+    id: ID!
+    name: String!
+    type: LogStreamType!
+    status: LogStreamStatusType!
+    # sink data
+    httpContentFormat: LogStreamWebhookContentFormat,
+    httpContentType: String,
+    httpEndpoint: URL,
+    httpAuthorization: String
   }
 
-  type PasswordComplexityOptions {
-    min_length : Int
-  }
-
-  type PasswordDictionary {
-    enable : Boolean
-    dictionary : [String]!
-  }
-
-  type PasswordHistory {
-    enable : Boolean
-    size : Int
-  }
-
-  type PasswordNoPersonalInfo {
-    enable : Boolean
-  }
-
-  type  UserNameValidationOptions {
-    min: Int
-    max: Int
-  }
 
   type OutputClientDelete {
     client_id: ID!
@@ -1381,10 +1408,6 @@ const typeDefs = gql`
 
   type OutputClientGrantDelete {
     id: ID!
-  }
-
-  type ValidationOptions {
-    username : UserNameValidationOptions
   }
 
   type OutputConnectionDelete {
@@ -1400,48 +1423,15 @@ const typeDefs = gql`
     id: ID!
   }
 
+  type OututLogStreamDeleted {
+    id: ID!
+  }
 
-
-  type DeleteGrantPayload {
-    triggerID : String
+  type OutputGrantDelete {
+    id : String
     user_id : String
   }
-
-  type Enabled {
-    enabled : Boolean
-  }
-
-  type EncryptionKeyClient {
-    pub: String
-    cert: String
-    subject:String
-  }
-
-  type Grant {
-    id : ID!
-    audience : String
-    clientID : String
-    scope: [String]!
-    user_id : String
-  }
-
-  type IOSClient {
-    team_id: String
-    app_bundle_identifier :String
-  }
-
-  type JWTConfigurationClient  {
-    lifetime_in_seconds: Int
-    secret_encoded: Boolean!
-    #TODO add scopes?
-    #scopes: {}, 
-    alg:String # TODO could be ENUM 'HS256' or 'RS256'
-  }
-
-  type MobileClient {
-    android : AndroidClient
-    ios : IOSClient
-  }
+  
 
   # TODO :   NativeSocialLogins  
   #    "native_social_login": {
@@ -1452,6 +1442,8 @@ const typeDefs = gql`
   #    "enabled": false
   #    }
   #    },
+
+
 
   type PageBackgroundColor {
     color: HCC
@@ -1464,21 +1456,6 @@ const typeDefs = gql`
     angle_deg: Int # 35
   }
 
-  type RefreshTokenClient {
-    expiration_type: ExpirationType
-    idle_token_lifetime : Int
-    infinite_idle_token_lifetime: Boolean
-    infinite_token_lifetime: Int
-    leeway: Int
-    rotation_type: RotationType
-    token_lifetime: Int
-  },
-
-  type SigningKeysClient {
-    cert: String
-    pkcs7: String
-    subject: String
-  }
 
 
 
@@ -1541,41 +1518,35 @@ const typeDefs = gql`
   type Query {
     branding: Branding
     brandingTemplates: BrandingTemplates
-
+    
     client(id: ID!) : Client
+    clientGrants: [ClientGrant]!
+    clientGrantsByFilter( filter : ClientGrantsByFilterInput): [ClientGrant]!
     clients: [Client]!
     clientsByFilter(filter : ClientsByFilterInput): [Client]!
     clientsByName(name : String!) : [Client]!
-
-    clientGrants: [ClientGrant]!
-    clientGrantsByFilter( filter : ClientGrantsByFilterInput): [ClientGrant]!
-
+    
+    connection(id: ID!) : Connection
+    connectionStatus(id: ID!) : ConnectionStatus
     connections: [Connection]!
     connectionsByFilter(filter: ConnectionByFilterInput): [Connection]!
     connectionsByName(name: String!) :[Connection]!
     connectionsByStrategy(strategy: ConnectionStrategy!) :[Connection]!
-    connection(id: ID!) : Connection
-    connectionStatus(id: ID!) : ConnectionStatus
-
+    
     deviceCredentialsByFilter(filter: DeviceCredentialsByFilterInput!) : [DeviceCredential]!
-
+    
     grants: [Grant]!
     grantsByFilter : [Grant!]
-
+    
+    hook(input: HookInput) : Hook
+    hookSecrets(id:ID): HookSecrets! # TODO better way? PAIR? HASHMAP?
     hooks: [Hook]!
     hooksByFilter(filter : HooksByFilterInput): [Hook]!
-    hook(input: HookInput) : Hook
-
-    hookSecrets(id:ID): HookSecrets ! # TODO better way? PAIR? HASHMAP?
-
+    
     logStream(id:ID): LogStream
     logStreams: [LogStream]!
   }
-
-  type OutputGrantDelete {
-    id : String
-    user_id : String
-  }
+  
 
   # ------------------
   # scalars
