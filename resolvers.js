@@ -470,8 +470,10 @@ const resolvers = {
     updateLogStreamEventGrid: (_, { input }, { dataSources }) => dataSources.clients.updateLogStream(input),
     updateLogStreamSplunk: (_, { input }, { dataSources }) => dataSources.clients.updateLogStream(input),
     updateLogStreamSumo: (_, { input }, { dataSources }) => dataSources.clients.updateLogStream(input),
-    updateLogStreamWebhook: (_, { input }, { dataSources }) => dataSources.clients.updateLogStream(input)
-
+    updateLogStreamWebhook: (_, { input }, { dataSources }) => dataSources.clients.updateLogStream(input),
+    roleCreate: (_, { input }, { dataSources }) => dataSources.clients.roleCreate(input),
+    roleUpdate: (_, { input }, { dataSources }) => dataSources.clients.roleUpdate(input),
+    roleDelete: (_, { input }, { dataSources }) => dataSources.clients.roleDelete(input)
   },
   OIDCChannelType: {
     BACK_CHANNEL: 'back_channel',
@@ -504,7 +506,10 @@ const resolvers = {
     hook: (_, { input }, { dataSources }) => dataSources.clients.getHook(input),
     hookSecrets: (_, { id }, { dataSources }) => dataSources.clients.getHookSecrets(id),
     logStream: (_, { id }, { dataSources }) => dataSources.clients.getLogStream(id),
-    logStreams: (_, __, { dataSources }) => dataSources.clients.getLogStreams()
+    logStreams: (_, __, { dataSources }) => dataSources.clients.getLogStreams(),
+    roleById: (_, { id }, { dataSources }) => dataSources.clients.rolesById(id),
+    roles: (_, __, { dataSources }) => dataSources.clients.rolesByFilter({}),
+    rolesByFilter: (_, { filter }, { dataSources }) => dataSources.clients.rolesByFilter(filter)
 
   },
   RotationType: {

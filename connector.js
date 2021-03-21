@@ -603,7 +603,7 @@ class Connector {
    * @see https://auth0.com/docs/api/management/v2#!/Hooks/delete_hooks_by_id
    */
   updateHook (hook) {
-    // TODO can we do this with destructuring, like create LogStream
+    // TODO can we do this with destructuring, like create LogStream"updateHook ({id, triggerId, ...patch)" instead of omit?
     const patch = this.omit(hook, this.patchFilters.hook)
     return this.api.patch(`/api/v2/hooks/${hook.id}`, patch).then(res => res.data)
   }
@@ -670,7 +670,61 @@ class Connector {
     return this.api.patch(`/api/v2/log-streams/${id}`, payload).then(res => res.data)
   }
 
-  // TODO: fix this, it's not pretty can probably do in a line using desctruct?
+  /**
+   * Retrieve a role.
+   * @param {string} id - the id of the role to get
+   * @returns {Promise<AxiosResponse<any>>}
+   * @see https://auth0.com/docs/api/management/v2#!/Roles/get_roles_by_id
+   */
+  roleById (id) {
+    return this.api.get(`/api/v2/roles/${id}`).then(res => res.data)
+  }
+
+  /**
+   * Retrieve filtered list of roles that can be assigned to users or groups.
+   * @param filter
+   * @param {number}  filter.[page]           - Page index of the results to return. First page is 0.
+   * @param {number}  filter.[per_page]       - Number of results per page. Paging is disabled if not set
+   * @returns {Promise<AxiosResponse<any>>}
+   * @see https://auth0.com/docs/api/management/v2#!/Roles/get_roles
+   */
+  rolesByFilter (filter) {
+    return this.api.get('/api/v2/roles', { params: filter }).then(res => res.data)
+  }
+
+  /**
+   * Create a new role.
+   * @param input - the role
+   * @returns {Promise<AxiosResponse<any>>}
+   * @see https://auth0.com/docs/api/management/v2#!/Roles/post_roles
+   */
+  roleCreate (input) {
+    return this.api.post('/api/v2/roles', input).then(res => res.data)
+  }
+
+  /**
+   * Delete a role.
+   * @param {oblect} role    - the role
+   * @param {string} role.id - the id of the role to delete
+   * @returns {Promise<{id: string|*}>}
+   * @see https://auth0.com/docs/api/management/v2#!/Roles/delete_roles_by_id
+   */
+  roleDelete ({ id }) {
+    return this.api.delete(`/api/v2/roles/${id}`).then(_res => { return { id: id } })
+  }
+
+  /**
+   * Update a role.
+   * @param {object} api         - the role
+   * @param {string} api.id      - the role id
+   * @param {object} api.payload - the role patch
+   * @returns {Promise<AxiosResponse<any>>}
+   */
+  roleUpdate ({ id, ...payload }) {
+    return this.api.patch(`/api/v2/roles/${id}`, payload).then(res => res.data)
+  }
+
+  // TODO: fix this, it's not pretty can probably do in a line using destruct?
   mungeClientFilter (filter) {
     filter = filter || {}
     if (filter.app_type) {

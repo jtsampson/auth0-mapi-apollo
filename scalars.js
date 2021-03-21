@@ -34,6 +34,18 @@ const Auth0ConnectionID = factory.getRegexScalar({
   description: 'Auth0DeviceCredentialID represents and Auth0 Connection ID',
   error: `Query error: Not a valid Auth0 connection ID, should match pattern: ${this.regex}`
 })
+const Auth0LogStreamID = factory.getRegexScalar({
+  name: 'Auth0DeviceConnectionID',
+  regex: /^lst_[A-Za-z0-9]{16}$/,
+  description: 'Auth0DeviceCredentialID represents and Auth0 Connection ID',
+  error: `Query error: Not a valid Auth0 connection ID, should match pattern: ${this.regex}`
+})
+const Auth0RoleID = factory.getRegexScalar({
+  name: 'Auth0DeviceConnectionID',
+  regex: /^rol_[A-Za-z0-9]{16}$/,
+  description: 'Auth0DeviceCredentialID represents and Auth0 Connection ID',
+  error: `Query error: Not a valid Auth0 connection ID, should match pattern: ${this.regex}`
+})
 const GraphQLHexColorCode = factory.getRegexScalar({
   name: 'HCC',
   regex: /^#([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$/i,
@@ -43,6 +55,8 @@ const GraphQLHexColorCode = factory.getRegexScalar({
 module.exports = {
   Auth0ConnectionID, // TODO use or not use, API already validates
   Auth0DeviceCredentialID, // TODO use or not use, API already validates
+  Auth0LogStreamID, // TODO use or not use, API already validates
+  Auth0RoleID, // TODO use or not use, API already validates
   GraphQLHexColorCode,
   GraphQLJSON,
   GraphQLJSONObject,

@@ -106,7 +106,11 @@ I compiled this list after the fact, so the api does not yet  hold up to these g
 | Resource Servers   | Create Resource Server                                 | apiCreate                         |
 | Resource Servers   | Update Resource Server                                 | apiUpdate                         |
 | Resource Servers   | Delete Resource Server                                 | apiDelete                         |
-| Roles              | All                                                    | `TODO`                          |
+| Roles              | Get Roles                                              | roles, rolesByFilter              |
+| Roles              | Get Role                                               | roleById                          |
+| Roles              | Create Role                                            | roleCreate                        |                       
+| Roles              | Update Role                                            | roleUpdate                        |                        
+| Roles Permissions  | TODO                                                   | roleDelete                        |                       
 | Rules              | All                                                    | `TODO`                          |
 | Rule Configs       | All                                                    | `TODO`                          |
 | User Blocks        | All                                                    | `TODO`                          |

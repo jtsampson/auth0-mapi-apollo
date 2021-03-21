@@ -585,6 +585,27 @@ const typeDefs = gql`
     secrets: Pair!
   }
 
+  input RoleByFilterInput {
+    name_filter : String # case insensitive search on name
+    page : Int
+    per_page : Int
+  }
+
+  input RoleCreateInput{
+    name: String!,
+    description: String!
+  }
+
+  input RoleDeleteInput{
+    id: ID!
+  }
+  
+  input RoleUpdateInput{
+    id: ID!
+    name: String,
+    description: String
+  }
+
   # ------------------
   # types 
   # ------------------
@@ -1520,6 +1541,10 @@ const typeDefs = gql`
     id : String
     user_id : String
   }
+
+  type OutputRoleDelete{
+    id: ID!
+  }
   
 
   # TODO :   NativeSocialLogins  
@@ -1567,9 +1592,22 @@ const typeDefs = gql`
     token_lifetime_for_web: Int
   }
 
-  type ApiScope{
+  type ApiScope {
     description: String
     value: String!
+  }
+  
+  type Role{
+    id: String,
+    name: String,
+    description: String
+  }
+
+  type RolePermission{
+    resource_server_identifier: ID!
+    permission_name: String
+    resource_server_name: String
+    description: String
   }
 
 
@@ -1627,6 +1665,10 @@ const typeDefs = gql`
     updateLogStreamSplunk(input : LogStreamSplunkUpdateInput) : LogStream
     updateLogStreamSumo(input : LogStreamSumoUpdateInput) : LogStream
     updateLogStreamWebhook(input : LogStreamWebhookUpdateInput) : LogStream
+
+    roleCreate(input: RoleCreateInput): Role
+    roleDelete(input: RoleDeleteInput): OutputRoleDelete
+    roleUpdate(input: RoleUpdateInput) : Role
   }
 
   # ------------------
@@ -1666,6 +1708,12 @@ const typeDefs = gql`
     
     logStream(id:ID): LogStream
     logStreams: [LogStream]!
+
+    roleById(id: ID!) :Role!
+    roles: [Role]!
+    rolesByFilter(input: RoleByFilterInput) : [Role]!
+    
+    #rolePermissionsByFilter(Input Role)
   }
   
 
