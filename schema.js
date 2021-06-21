@@ -223,6 +223,12 @@ const typeDefs = gql`
     NON_ROTATING
   }
 
+  enum RuleStage {
+    LOGIN_SUCCESS
+    LOGIN_FAILURE
+    PRE_AUTHORIZE
+  }
+
   enum StrengthLevel {
     EXCELLENT
     FAIR
@@ -604,6 +610,12 @@ const typeDefs = gql`
     id: ID!
     name: String,
     description: String
+  }
+
+  input RuleByFilterInput {
+    enabled : Boolean
+    page : Int
+    per_page : Int
   }
 
   # ------------------
@@ -1610,6 +1622,15 @@ const typeDefs = gql`
     description: String
   }
 
+  type Rule {
+    id: ID! ## con_0000000000000001,
+    name: String
+    enabled: Boolean
+    script: String
+    order: Int
+    stage: String ## Enum? login_success, login_failure, or pre_authorize.
+  }
+
 
 
 
@@ -1712,6 +1733,9 @@ const typeDefs = gql`
     roleById(id: ID!) :Role!
     roles: [Role]!
     rolesByFilter(input: RoleByFilterInput) : [Role]!
+    
+    rules: [Rule]!
+    rulesByFilter(filter: RuleByFilterInput): [Rule]!
     
     #rolePermissionsByFilter(Input Role)
   }

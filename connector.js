@@ -13,6 +13,8 @@ require('axios-debug-log')({
       'from ' + response.config.url
     )
   },
+
+
   error: function (debug, error) {
     // Read https://www.npmjs.com/package/axios#handling-errors for more info
     debug('Boom', error)
@@ -722,6 +724,19 @@ class Connector {
    */
   roleUpdate ({ id, ...payload }) {
     return this.api.patch(`/api/v2/roles/${id}`, payload).then(res => res.data)
+  }
+
+  /**
+   * Retrieve a filtered list of rules
+   * @param {object} filter   - the filter
+   * @param {boolean} filter.enabled - filter for enabled (true) or disabled (false) rules
+   * @param {number} filter.[page]      - page index of the results to return. First page is 0
+   * @param {number} filter.[per_page]  - number of results per page. Paging is disabled if not set
+   * @returns {PromiseLike<any> | Promise<any>}
+   */
+  getRulesByFilter (filter) {
+    filter = filter || {}
+    return this.api.get('/api/v2/rules', { params: filter }).then(res => res.data)
   }
 
   // TODO: fix this, it's not pretty can probably do in a line using destruct?

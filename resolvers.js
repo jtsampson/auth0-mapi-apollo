@@ -62,9 +62,9 @@ const resolvers = {
   },
   BrandingColors: {
     /* If page_background is a string value, coerce it to an
-     * object so we can resolve it to PageBackground and union
-     * it with PageBackgroundGradient
-     */
+         * object so we can resolve it to PageBackground and union
+         * it with PageBackgroundGradient
+         */
     page_background: ({ page_background }) => typeof (page_background) === 'string' ? { color: page_background } : page_background
 
   },
@@ -93,47 +93,86 @@ const resolvers = {
       switch (strategy) {
         // TODO: can we rewrite this to transform strategy and concetenate, rather than direct mappings - would have to take into account
         // TODO: maybe switching on name for social Social Connections might work insted of strategies
-        case 'apple': return 'ConnectionOptionsApple'
-        case 'amazon': return 'ConnectionOptionsAmazon'
-        case 'baidu': return 'ConnectionOptionsBaidu'
-        case 'bitbucket': return 'ConnectionOptionsBitBucket'
-        case 'box': return 'ConnectionOptionsBox'
-        case 'dropbox': return 'ConnectionOptionsDropBox'
-        case 'daccount': return 'ConnectionOptionsDAccount'
-        case 'dwolla': return 'ConnectionOptionsDWolla'
-        case 'evernote': return 'ConnectionOptionsEvernote'
-        case 'evernote-sandbox': return 'ConnectionOptionsEvernoteSandbox'
-        case 'exact': return 'ConnectionOptionsExact'
-        case 'facebook': return 'ConnectionOptionsFacebook'
-        case 'fitbit': return 'ConnectionOptionsFitBit'
-        case 'github' : return 'ConnectionOptionsGitHub'
-        case 'line': return 'ConnectionOptionsLine'
-        case 'linkedin': return 'ConnectionOptionsLinkedIn'
-        case 'oauth2' : return 'ConnectionOptionsOAuth2'
-        case 'paypal' : return 'ConnectionOptionsPayPal'
-        case 'paypal-sandbox' : return 'ConnectionOptionsPayPalSandbox'
-        case 'planningcenter' : return 'ConnectionOptionsPlanningCenter'
-        case 'renren' : return 'ConnectionOptionsRenRen'
-        case 'salesforce': return 'ConnectionOptionSalesForce'
-        case 'salesforce-sandbox': return 'ConnectionOptionSalesForceSandbox'
-        case 'salesforce-community': return 'ConnectionOptionSalesForceCommunity'
-        case 'shopify': return 'ConnectionOptionsShopify'
-        case 'twitter' : return 'ConnectionOptionsTwitter'
-        case 'thirtysevensignals': return 'ConnectionOptionsThirtySevenSignals' // AKA BaseCamp
-        case 'vkontakte' : return 'ConnectionOptionsVKontakte'
-        case 'weibo' : return 'ConnectionOptionsWeibo'
-        case 'windowslive': return 'ConnectionOptionsWindowsLive'
-        case 'wordpress': return 'ConnectionOptionsWordPress'
-        case 'yahoo': return 'ConnectionOptionsYahoo'
-        case 'yammer': return 'ConnectionOptionsYammer'
-        case 'yandex' : return 'ConnectionOptionsYandex'
-        case 'auth0': return 'ConnectionOptionsAuth0'
+        case 'apple':
+          return 'ConnectionOptionsApple'
+        case 'amazon':
+          return 'ConnectionOptionsAmazon'
+        case 'baidu':
+          return 'ConnectionOptionsBaidu'
+        case 'bitbucket':
+          return 'ConnectionOptionsBitBucket'
+        case 'box':
+          return 'ConnectionOptionsBox'
+        case 'dropbox':
+          return 'ConnectionOptionsDropBox'
+        case 'daccount':
+          return 'ConnectionOptionsDAccount'
+        case 'dwolla':
+          return 'ConnectionOptionsDWolla'
+        case 'evernote':
+          return 'ConnectionOptionsEvernote'
+        case 'evernote-sandbox':
+          return 'ConnectionOptionsEvernoteSandbox'
+        case 'exact':
+          return 'ConnectionOptionsExact'
+        case 'facebook':
+          return 'ConnectionOptionsFacebook'
+        case 'fitbit':
+          return 'ConnectionOptionsFitBit'
+        case 'github' :
+          return 'ConnectionOptionsGitHub'
+        case 'line':
+          return 'ConnectionOptionsLine'
+        case 'linkedin':
+          return 'ConnectionOptionsLinkedIn'
+        case 'oauth2' :
+          return 'ConnectionOptionsOAuth2'
+        case 'paypal' :
+          return 'ConnectionOptionsPayPal'
+        case 'paypal-sandbox' :
+          return 'ConnectionOptionsPayPalSandbox'
+        case 'planningcenter' :
+          return 'ConnectionOptionsPlanningCenter'
+        case 'renren' :
+          return 'ConnectionOptionsRenRen'
+        case 'salesforce':
+          return 'ConnectionOptionSalesForce'
+        case 'salesforce-sandbox':
+          return 'ConnectionOptionSalesForceSandbox'
+        case 'salesforce-community':
+          return 'ConnectionOptionSalesForceCommunity'
+        case 'shopify':
+          return 'ConnectionOptionsShopify'
+        case 'twitter' :
+          return 'ConnectionOptionsTwitter'
+        case 'thirtysevensignals':
+          return 'ConnectionOptionsThirtySevenSignals' // AKA BaseCamp
+        case 'vkontakte' :
+          return 'ConnectionOptionsVKontakte'
+        case 'weibo' :
+          return 'ConnectionOptionsWeibo'
+        case 'windowslive':
+          return 'ConnectionOptionsWindowsLive'
+        case 'wordpress':
+          return 'ConnectionOptionsWordPress'
+        case 'yahoo':
+          return 'ConnectionOptionsYahoo'
+        case 'yammer':
+          return 'ConnectionOptionsYammer'
+        case 'yandex' :
+          return 'ConnectionOptionsYandex'
+        case 'auth0':
+          return 'ConnectionOptionsAuth0'
 
           // Enterprise Connections
-        case 'google-oauth2': return 'ConnectionOptionsGoogleOAuth2'
-        case 'oidc' : return 'ConnectionOptionsOIDC'
-        case 'samlp': return 'ConnectionOptionsSaml'
-        case 'waad': return 'ConnectionOptionsWAAD'
+        case 'google-oauth2':
+          return 'ConnectionOptionsGoogleOAuth2'
+        case 'oidc' :
+          return 'ConnectionOptionsOIDC'
+        case 'samlp':
+          return 'ConnectionOptionsSaml'
+        case 'waad':
+          return 'ConnectionOptionsWAAD'
         default :
           return null
       }
@@ -370,12 +409,18 @@ const resolvers = {
   LogStream: {
     __resolveType ({ type }, context, info) {
       switch (type) {
-        case 'datadog' : return 'LogStreamDataDog'
-        case 'eventbridge': return 'LogStreamEventBridge'
-        case 'eventgrid' : return 'LogStreamSinkEventGrid'
-        case 'http' : return 'LogStreamWebhook'
-        case 'splunk' :return 'LogStreamSplunk'
-        case 'sumo' :return 'LogStreamSumo'
+        case 'datadog' :
+          return 'LogStreamDataDog'
+        case 'eventbridge':
+          return 'LogStreamEventBridge'
+        case 'eventgrid' :
+          return 'LogStreamSinkEventGrid'
+        case 'http' :
+          return 'LogStreamWebhook'
+        case 'splunk' :
+          return 'LogStreamSplunk'
+        case 'sumo' :
+          return 'LogStreamSumo'
         default :
           return null // GraphQLError is thrown
       }
@@ -458,12 +503,30 @@ const resolvers = {
     addHookSecrets: (_, { input }, { dataSources }) => dataSources.clients.addHookSecrets(input),
     updateHookSecrets: (_, { input }, { dataSources }) => dataSources.clients.updateHookSecrets(input),
     deleteHookSecrets: (_, { input }, { dataSources }) => dataSources.clients.deleteHookSecrets(input),
-    createLogStreamDataDog: (_, { input }, { dataSources }) => dataSources.clients.createLogStream({ ...input, type: 'datadog' }),
-    createLogStreamEventBridge: (_, { input }, { dataSources }) => dataSources.clients.createLogStream({ ...input, type: 'eventbridge' }),
-    createLogStreamEventGrid: (_, { input }, { dataSources }) => dataSources.clients.createLogStream({ ...input, type: 'eventgrid' }),
-    createLogStreamSplunk: (_, { input }, { dataSources }) => dataSources.clients.createLogStream({ ...input, type: 'splunk' }),
-    createLogStreamSumo: (_, { input }, { dataSources }) => dataSources.clients.createLogStream({ ...input, type: 'sumo' }),
-    createLogStreamWebhook: (_, { input }, { dataSources }) => dataSources.clients.createLogStream({ ...input, type: 'http' }),
+    createLogStreamDataDog: (_, { input }, { dataSources }) => dataSources.clients.createLogStream({
+      ...input,
+      type: 'datadog'
+    }),
+    createLogStreamEventBridge: (_, { input }, { dataSources }) => dataSources.clients.createLogStream({
+      ...input,
+      type: 'eventbridge'
+    }),
+    createLogStreamEventGrid: (_, { input }, { dataSources }) => dataSources.clients.createLogStream({
+      ...input,
+      type: 'eventgrid'
+    }),
+    createLogStreamSplunk: (_, { input }, { dataSources }) => dataSources.clients.createLogStream({
+      ...input,
+      type: 'splunk'
+    }),
+    createLogStreamSumo: (_, { input }, { dataSources }) => dataSources.clients.createLogStream({
+      ...input,
+      type: 'sumo'
+    }),
+    createLogStreamWebhook: (_, { input }, { dataSources }) => dataSources.clients.createLogStream({
+      ...input,
+      type: 'http'
+    }),
     deleteLogStream: (_, { id }, { dataSources }) => dataSources.clients.deleteLogStream(id),
     updateLogStreamDataDog: (_, { input }, { dataSources }) => dataSources.clients.updateLogStream(input),
     updateLogStreamEventBridge: (_, { input }, { dataSources }) => dataSources.clients.updateLogStream(input),
@@ -509,11 +572,18 @@ const resolvers = {
     logStreams: (_, __, { dataSources }) => dataSources.clients.getLogStreams(),
     roleById: (_, { id }, { dataSources }) => dataSources.clients.rolesById(id),
     roles: (_, __, { dataSources }) => dataSources.clients.rolesByFilter({}),
-    rolesByFilter: (_, { filter }, { dataSources }) => dataSources.clients.rolesByFilter(filter)
+    rolesByFilter: (_, { filter }, { dataSources }) => dataSources.clients.rolesByFilter(filter),
+    rules: (_, __, { dataSources }) => dataSources.clients.getRulesByFilter({}),
+    rulesByFilter: (_, { filter }, { dataSources }) => dataSources.clients.getRulesByFilter(filter)
 
   },
   RotationType: {
     NON_ROTATING: 'non-rotating' // TODO are there more types?
+  },
+  RuleStage: {
+    LOGIN_SUCCESS: 'login_success',
+    LOGIN_FAILURE: 'login_failure',
+    PRE_AUTHORIZE: 'pre_authorize'
   },
   StrengthLevel: {
     NONE: 'none',
